@@ -1,47 +1,68 @@
 import * as React from "react";
 import { useState, useCallback, useEffect } from "react";
-import axios from 'axios';
-import { StyleSheet, View, Text, Image, Pressable, Modal } from "react-native";
+import { StyleSheet, View, Text, Image, Pressable, Modal, AsyncStorage, ScrollView} from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import axios from 'axios';
 import PlusReservation from "../components/PlusReservation";
 import NewReservation from "../components/NewReservation";
 import Alarmcenterbanner from "../components/Alarmcenterbanner";
+import NavigationBar from "../components/NavigationBar";
 
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+// 오늘 날짜의 데이터 불러오기
+/**
+var d = new Date();
+var year = d.getFullYear();
+var month = (d.getMonth() + 1);
+var date = d.getDate();
 
-const StylerReservation = () => {
-  const [monthData, setMonthData] = useState({});
-  
-  useEffect(()=>{
-    const logink = async () =>{
-      
-      let result = await axios.post('http://13.124.68.16/sr/getOverallReserves',{
-        access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6Imtha2FvIiwiZW1haWwiOiJraW10YWhlbkBoYW55YW5nLmFjLmtyIiwiaWF0IjoxNjY4NzY0OTA2LCJleHAiOjE2Njg4NTEzMDZ9.0avjT3b6xL8fSqh1PoDTFzdVjiD3eFSvlSd8tcM1keI",
+*/
+
+const fetchApi = async (setReserveData) => {
+    let result = await axios.post('http://15.165.172.198/sr/getDateReserves', {
+        access_token: await AsyncStorage.getItem('access_token'),
         year: 2022,
-        month: 12,
-      }); 
-      console.log(result.data.data); 
-      const obj = {};
-      for(let i of result.data.data){
-        const d = new Date(i);
-        obj[`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`] = {marked: 'true', dotColor: 'red'};
-      }
-      setMonthData(obj); 
-      console.log(obj);
+        month: 11,
+        date: 12,
+    });
+    let dates=[];
+    console.log(result.data);
+    let key =  1;
+    for(const i of result.data.data){
+        console.log('key')
+        let members = [];
+        for(const k of i.members){
+            members.push(<Text key={key++}>{k.nickname}</Text>);
+        }
+
+        let courses = ["미세먼지 제거", "눈/비 건조", "정장/코트", "스팀살균"];
+
+        // 예약한 시간 별로 섹션 묶어서 보여줌
+        dates.push(
+        <View key={key++} style={styles.box}>
+            <View style = {styles.time_group}>
+                <Text style = {styles.text_st}>{i.start_time.slice( 11, 16 )}</Text>
+                <Text style = {styles.text_et}>+{i.course.duration}분</Text>
+            </View>
+            <View style = {styles.info_group}>
+                <View style = {styles.text_position}>
+                    <Image
+                        style={styles.cloth_image}
+                        resizeMode="cover"
+                        source={require("../assets/clothes-hanger-white.png")} />
+                    <Text style = {styles.info_text}>예약 코스: {courses[i.course.course_id-1]}</Text>
+                    <Text style = {styles.info_text}>최초 예약자: {i.owner.nickname}</Text>
+                    <Text style = {styles.info_text}>예약 현황: {i.total_count} / 5</Text>
+                    <Text style = {styles.info_text}>예약 명단: {members}</Text>
+                </View>                  
+            </View>                     
+        </View>
+            );
     }
-    logink();
+    setReserveData(dates);
+   
     
-  },[]);
-  return(
-    <>
-      
-      <Calendar
-        markedDates={monthData}
-      />
-      
-    </>
-  )
-  /*
+  }
+const TodayReservation = () => {
   const [container1Visible, setContainer1Visible] = useState(false);
   const [ellipsisV1IconVisible, setEllipsisV1IconVisible] = useState(false);
   const [ellipsisV1Icon1Visible, setEllipsisV1Icon1Visible] = useState(false);
@@ -89,296 +110,126 @@ const StylerReservation = () => {
   const closeNotificationContainer = useCallback(() => {
     setNotificationContainerVisible(false);
   }, []);
+
+  const [reserveData, setReserveData] = useState([]);
+  useEffect(()=>{
+    const func = async ()=>{
+        await fetchApi(setReserveData);
+    }
+    func();
+  },[]);
+  
   return (
-    <>
-      <View style={styles.stylerReservationView}>
-        <View style={styles.startWithSelectionPage}>
-          <View style={styles.rectangleView} />
-          <Text style={styles.text}>09:00</Text>
-          <Text style={styles.text1}>09:30</Text>
-          <Text style={styles.text2}>10:00</Text>
-          <Text style={styles.text3}>10:30</Text>
-          <Text style={styles.text4}>11:00</Text>
-          <View style={styles.rectangleView1} />
-          <View style={styles.rectangleView2} />
-          <Text style={styles.aMText}>AM</Text>
-          <Text style={styles.pMText}>PM</Text>
-        </View>
-        <View style={styles.courseSelectionPage}>
-          <View style={styles.rectangleView3} />
-          <Text style={styles.text5}>장마철 빨래건조 코스</Text>
-          <Text style={styles.text6}>살균 코스</Text>
-          <Text style={styles.text7}>정장 / 코트 코스</Text>
-          <Text style={styles.text8}>울 / 니트 코스</Text>
-          <Text style={styles.text9}>기능성 의류 관리 코스</Text>
-          <Text style={styles.text10}>침구 관리 코스</Text>
-        </View>
-        <View style={styles.numberOfClothesSelectionPa}>
-          <View style={styles.rectangleView4} />
-          <Text style={styles.text11}>1</Text>
-          <Text style={styles.text12}>2</Text>
-          <Text style={styles.text13}>3</Text>
-          <Text style={styles.text14}>4</Text>
-          <Text style={styles.text15}>5</Text>
-          <Text style={styles.text16}>6</Text>
-        </View>
-        <View style={styles.view}>
-          <View style={styles.navigationBarView}>
-            <View style={styles.rectangleView5} />
-          </View>
-          <View style={styles.frameView}>
-            <Pressable
-              style={styles.brokenEssentionalUIHom}
-              onPress={() => navigation.navigate("MainPage")}
-            >
-              <Image
-                style={styles.icon}
-                resizeMode="cover"
-                source={require("../assets/home.png")}
-              />
-            </Pressable>
-            <Image
-              style={[styles.boldTimeCalendar, styles.ml74]}
-              resizeMode="cover"
-              source={require("../assets/timetable_fill.png")}
-            />
-            <Pressable
-              style={[styles.clothPressable, styles.ml74]}
-              onPress={() => navigation.navigate("MyCloset")}
-            >
-              <Image
-                style={styles.icon1}
-                resizeMode="cover"
-                source={require("../assets/closet.png")}
-              />
-            </Pressable>
-            <Pressable
-              style={[styles.userPressable, styles.ml74]}
-              onPress={() => navigation.navigate("MyPage")}
-            >
-              <Image
-                style={styles.icon2}
-                resizeMode="cover"
-                source={require("../assets/user.png")}
-              />
-            </Pressable>
-          </View>
-        </View>
-        <Pressable style={styles.pressable} onPress={openContainer1}>
-          <View style={styles.rectangleView6} />
-          <Text style={styles.text17}>새로 예약하기</Text>
-        </Pressable>
-        <View style={styles.calendarView}>
-          <View style={styles.groupView8}>
-            <View style={styles.groupView}>
-              <Text style={styles.sText}>S</Text>
-              <Text style={styles.text18}>21</Text>
-            </View>
-            <View style={styles.groupView1}>
-              <Text style={styles.text19}>22</Text>
-              <Text style={styles.mText}>M</Text>
-            </View>
-            <View style={styles.groupView2}>
-              <Text style={styles.text20}>23</Text>
-              <Text style={styles.tText}>T</Text>
-            </View>
-            <View style={styles.groupView4}>
-              <View style={styles.rectangleView7} />
-              <View style={styles.groupView3}>
-                <Text style={styles.text21}>24</Text>
-                <Text style={styles.wText}>W</Text>
-              </View>
-            </View>
-            <View style={styles.groupView5}>
-              <Text style={styles.text22}>25</Text>
-              <Text style={styles.tText1}>T</Text>
-            </View>
-            <View style={styles.groupView6}>
-              <Text style={styles.text23}>26</Text>
-              <Text style={styles.fText}>F</Text>
-            </View>
-            <View style={styles.groupView7}>
-              <Text style={styles.text24}>27</Text>
-              <Text style={styles.sText1}>S</Text>
-            </View>
-          </View>
-          <View style={styles.lineView} />
-        </View>
-        <View style={styles.scheduleView}>
-          <View style={styles.groupView17}>
-            <View style={styles.rectangleView8} />
-            <View style={styles.groupView11}>
-              <View style={styles.groupView9}>
-                <Text style={styles.text31}>11:00</Text>
-                <Text style={styles.text32}>12:00</Text>
-              </View>
-              <View style={styles.groupView10}>
-                <View style={styles.rectangleView9} />
-                <Pressable
-                  style={styles.ellipsisV1Pressable}
-                  onPress={openEllipsisV1Icon}
-                >
-                  <Image
-                    style={styles.icon3}
-                    resizeMode="cover"
-                    source={require("../assets/add-red.png")}
-                  />
-                </Pressable>
-                <Text style={styles.text27}>살균 코스</Text>
-                <Text style={styles.text28}>/ 5</Text>
-                <Text style={styles.text29}>3</Text>
-                <Text style={styles.text30}>김태현, 박세은</Text>
-                <Image
-                  style={styles.userIcon}
-                  resizeMode="cover"
-                  source={require("../assets/group.png")}
-                />
-                <Image
-                  style={styles.brokenEssentionalUITS}
-                  resizeMode="cover"
-                  source={require("../assets/clothes-hanger.png")}
-                />
-              </View>
-            </View>
-            <View style={styles.groupView13}>
-              <Text style={styles.text31}>12:00</Text>
-              <Text style={styles.text32}>12:30</Text>
-              <View style={styles.groupView12}>
-                <View style={styles.rectangleView10} />
-                <Pressable
-                  style={styles.ellipsisV1Pressable1}
-                  onPress={openEllipsisV1Icon1}
-                >
-                  <Image
-                    style={styles.icon4}
-                    resizeMode="cover"
-                    source={require("../assets/add-red.png")}
-                  />
-                </Pressable>
-                <Text style={styles.text33}>정장/코트 코스</Text>
-                <Text style={styles.text34}>/ 5</Text>
-                <Text style={styles.text35}>2</Text>
-                <Text style={styles.text36}>이승호, 허정윤</Text>
-                <Image
-                  style={styles.userIcon1}
-                  resizeMode="cover"
-                  source={require("../assets/group.png")}
-                />
-                <Image
-                  style={styles.brokenEssentionalUITS1}
-                  resizeMode="cover"
-                  source={require("../assets/clothes-hanger.png")}
-                />
-              </View>
-            </View>
-            <View style={styles.groupView16}>
-              <View style={styles.groupView14}>
-                <View style={styles.rectangleView11} />
-                <Text style={styles.text37}>침구관리 코스</Text>
-                <Text style={styles.text38}>/ 5</Text>
-                <Text style={styles.text39}>5</Text>
-                <Text style={styles.text40}>김태현, 박세은</Text>
-                <Image
-                  style={styles.userIcon2}
-                  resizeMode="cover"
-                  source={require("../assets/group-white.png")}
-                />
-                <Image
-                  style={styles.brokenEssentionalUITS2}
-                  resizeMode="cover"
-                  source={require("../assets/clothes-hanger-white.png")}
-                />
-              </View>
-              <View style={styles.groupView15}>
-                <Text style={styles.text31}>09:00</Text>
-                <Text style={styles.text32}>11:00</Text>
-              </View>
-            </View>
-          </View>
-        </View>
-        <View style={styles.menuView}>
-          <View style={styles.rectangleView12} />
-          <Pressable
-            style={styles.notificationPressable}
-            onPress={openNotificationContainer}
-          >
+      <View style={styles.layoutWrapper}>
+    
+    <View style={styles.menuView}>
+        
+        <Pressable
+        style={styles.notificationPressable}
+        onPress={openNotificationContainer}
+        >
             <View style={styles.rectangleView13} />
             <Image
               style={styles.notificationIcon}
               resizeMode="cover"
-              source={require("../assets/notification-black.png")}
-            />
-          </Pressable>
-          <Pressable
-            style={styles.pressable1}
-            onPress={() => navigation.navigate("MainPage")}
-          >
+              source={require("../assets/notification-black.png")} />
+        </Pressable>
+        <Pressable
+        style={styles.pressable1}
+        onPress={() => navigation.navigate("MainPage")}
+        >
             <View style={styles.rectangleView14} />
             <Image
               style={styles.arrowLeft}
               resizeMode="cover"
-              source={require("../assets/back-arrow.png")}
-            />
-          </Pressable>
-          <View style={styles.view1}>
+              source={require("../assets/back-arrow.png")} />
+        </Pressable>
+        <View style={styles.view1}>
             <Text style={styles.wed15SeptemperText}>Styler Reservation</Text>
-          </View>
         </View>
-      </View>
-
-      <Modal animationType="fade" transparent visible={container1Visible}>
-        <View style={styles.container1Overlay}>
-          <Pressable style={styles.container1Bg} onPress={closeContainer1} />
-          <PlusReservation onClose={closeContainer1} />
-        </View>
-      </Modal>
-
-      <Modal animationType="fade" transparent visible={ellipsisV1IconVisible}>
-        <View style={styles.ellipsisV1IconOverlay}>
-          <Pressable
-            style={styles.ellipsisV1IconBg}
-            onPress={closeEllipsisV1Icon}
-          />
-          <NewReservation onClose={closeEllipsisV1Icon} />
-        </View>
-      </Modal>
-
-      <Modal animationType="fade" transparent visible={ellipsisV1Icon1Visible}>
-        <View style={styles.ellipsisV1Icon1Overlay}>
-          <Pressable
-            style={styles.ellipsisV1Icon1Bg}
-            onPress={closeEllipsisV1Icon1}
-          />
-          <NewReservation onClose={closeEllipsisV1Icon1} />
-        </View>
-      </Modal>
-
-      <Modal animationType="fade" transparent visible={ellipsisV1Icon2Visible}>
-        <View style={styles.ellipsisV1Icon2Overlay}>
-          <Pressable
-            style={styles.ellipsisV1Icon2Bg}
-            onPress={closeEllipsisV1Icon2}
-          />
-          <NewReservation onClose={closeEllipsisV1Icon2} />
-        </View>
-      </Modal>
-
-      <Modal
-        animationType="fade"
-        transparent
-        visible={notificationContainerVisible}
+    </View>
+    
+    <View style={styles.wrapper}>
+    <View style={styles.calendarView}>
+      <Text
+        style={styles.todaysReservationText}
       >
-        <View style={styles.notificationContainerOverlay}>
-          <Pressable
-            style={styles.notificationContainerBg}
-            onPress={closeNotificationContainer}
-          />
-          <Alarmcenterbanner onClose={closeNotificationContainer} />
+          {`Today’s Reservation  `}
+      </Text>
+      <Text style={styles.text0}>
+          오늘의 스타일러 예약 일정을 확인해보세요
+      </Text>
+      <View style={styles.SplitlineView} />
+
+    </View>
+    <ScrollView style={styles.scheduleView}>
+        {reserveData}
+        
+    </ScrollView>
+    <Pressable style={styles.pressable} onPress={openContainer1}>
+      <View style={styles.rectangleView6} />
+      <Text style={styles.text17}>새로운 예약하기</Text>
+    </Pressable>
+    
+    <View style={styles.view}>
+        <NavigationBar select={2}/>
+    </View>
+
+    </View>
+    
+      
+    
+        
+        
+        <Modal animationType="fade" transparent visible={container1Visible}>
+          <View style={styles.container1Overlay}>
+            <Pressable style={styles.container1Bg} onPress={closeContainer1} />
+            <PlusReservation onClose={closeContainer1} />
+          </View>
+        </Modal>
+        
+        <Modal animationType="fade" transparent visible={ellipsisV1IconVisible}>
+          <View style={styles.ellipsisV1IconOverlay}>
+            <Pressable
+              style={styles.ellipsisV1IconBg}
+              onPress={closeEllipsisV1Icon} />
+            <NewReservation onClose={closeEllipsisV1Icon} />
+          </View>
+        </Modal>
+        
+        <Modal animationType="fade" transparent visible={ellipsisV1Icon1Visible}>
+          <View style={styles.ellipsisV1Icon1Overlay}>
+            <Pressable
+              style={styles.ellipsisV1Icon1Bg}
+              onPress={closeEllipsisV1Icon1} />
+            <NewReservation onClose={closeEllipsisV1Icon1} />
+          </View>
+        </Modal>
+        
+        <Modal animationType="fade" transparent visible={ellipsisV1Icon2Visible}>
+          <View style={styles.ellipsisV1Icon2Overlay}>
+            <Pressable
+              style={styles.ellipsisV1Icon2Bg}
+              onPress={closeEllipsisV1Icon2} />
+            <NewReservation onClose={closeEllipsisV1Icon2} />
+          </View>
+        </Modal>
+        
+        <Modal
+          animationType="fade"
+          transparent
+          visible={notificationContainerVisible}
+        >
+          <View style={styles.notificationContainerOverlay}>
+            <Pressable
+              style={styles.notificationContainerBg}
+              onPress={closeNotificationContainer} />
+            <Alarmcenterbanner onClose={closeNotificationContainer} />
+          </View>
+        </Modal>
         </View>
-      </Modal>
-    </>
+        
   );
-  */
 };
 
 const styles = StyleSheet.create({
@@ -416,6 +267,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "rgba(113, 113, 113, 0.3)",
+  },
+  cloth_image: {
+    bottom: 5,
+    width: 30,
+    height: 30,
+    resizeMode: "cover",
   },
   ellipsisV1Icon1Bg: {
     position: "absolute",
@@ -470,12 +327,15 @@ const styles = StyleSheet.create({
     width: 144,
     height: 117,
   },
+  text_position: {
+    top: 30,
+    left: 20,
+  },
   text: {
     position: "absolute",
     top: 12,
     left: 18,
     fontSize: 12,
- 
     color: "#adadad",
     textAlign: "left",
     width: 33.92,
@@ -485,7 +345,6 @@ const styles = StyleSheet.create({
     top: 33,
     left: 18,
     fontSize: 12,
- 
     color: "#adadad",
     textAlign: "left",
     width: 33.92,
@@ -495,7 +354,6 @@ const styles = StyleSheet.create({
     top: 54,
     left: 18,
     fontSize: 12,
- 
     color: "#a50034",
     textAlign: "left",
     width: 33.92,
@@ -506,7 +364,6 @@ const styles = StyleSheet.create({
     left: 18,
     fontSize: 12,
     fontWeight: "800",
- 
     color: "#a50034",
     textAlign: "left",
     width: 33.92,
@@ -516,7 +373,6 @@ const styles = StyleSheet.create({
     top: 96,
     left: 18,
     fontSize: 12,
- 
     color: "#adadad",
     textAlign: "left",
     width: 33.92,
@@ -654,7 +510,6 @@ const styles = StyleSheet.create({
     top: 118,
     left: 19,
     fontSize: 11,
- 
     color: "#adadad",
     textAlign: "left",
     display: "flex",
@@ -766,30 +621,12 @@ const styles = StyleSheet.create({
   },
   rectangleView5: {
     position: "absolute",
-    top: 17,
-    left: 129,
+    top: 45.5,
+    left: 141.5,
     borderRadius: 10,
     backgroundColor: "rgba(165, 0, 52, 0.2)",
     width: 34,
     height: 34,
-  },
-  navigationBarView: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    backgroundColor: "#fff",
-    shadowColor: "rgba(0, 0, 0, 0.06)",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowRadius: 40,
-    elevation: 40,
-    shadowOpacity: 1,
-    width: 390,
-    height: 73,
   },
   icon: {
     width: "100%",
@@ -832,23 +669,12 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-  frameView: {
-    position: "absolute",
-    top: 21,
-    left: 26,
-    flexDirection: "row",
-    paddingHorizontal: 10,
-    paddingVertical: 0,
-    boxSizing: "border-box",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   view: {
-    position: "absolute",
-    top: 771,
+    position: "fixed",
     left: 0,
-    width: 390,
-    height: 73,
+    top: 0,
+    width: "100%",
+    height: 100,
   },
   rectangleView6: {
     position: "absolute",
@@ -883,8 +709,8 @@ const styles = StyleSheet.create({
   },
   pressable: {
     position: "absolute",
-    top: 687,
-    left: 79,
+    top: 720,
+    left: 90,
     width: 233,
     height: 42,
   },
@@ -1086,16 +912,6 @@ const styles = StyleSheet.create({
     width: 323,
     height: 57,
   },
-  lineView: {
-    position: "absolute",
-    top: 68.5,
-    left: -0.5,
-    borderStyle: "solid",
-    borderColor: "#faf9f9",
-    borderTopWidth: 1,
-    width: 376,
-    height: 1,
-  },
   calendarView: {
     position: "absolute",
     top: 137,
@@ -1111,20 +927,21 @@ const styles = StyleSheet.create({
     width: 2,
     height: 467,
   },
-  text25: {
+  text_st: {
     position: "absolute",
-    top: 0,
-    left: 0,
-    fontSize: 16,
-    fontWeight: "500",
+    top: 5,
+    left: -15,
+    fontSize: 20,
+    width: 70,
+    fontWeight: "700",
     color: "#212525",
     textAlign: "right",
   },
-  text26: {
+  text_et: {
     position: "absolute",
     top: 28,
-    left: 1,
-    fontSize: 14,
+    left: 14,
+    fontSize: 16,
     fontWeight: "500",
     color: "#bcc1cd",
     textAlign: "right",
@@ -1145,9 +962,12 @@ const styles = StyleSheet.create({
     width: 250,
     height: 137,
   },
-  icon3: {
-    width: "100%",
-    height: "100%",
+  barIcon: {
+    position: "absolute",
+    width: 24,
+    height: 24,
+    top: 50.5,
+    left: 145.5,
     overflow: "hidden",
   },
   ellipsisV1Pressable: {
@@ -1157,14 +977,10 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-  text27: {
-    position: "absolute",
-    top: 16,
-    left: 16,
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#212525",
-    textAlign: "left",
+  info_text: {
+    fontSize: 15,
+    fontWeight: "500",
+    color: "#fff",
   },
   text28: {
     position: "absolute",
@@ -1211,35 +1027,35 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     maxHeight: "100%",
   },
-  groupView10: {
+  info_group: {
     position: "absolute",
     top: 0,
-    left: 70,
+    left: 90,
     width: 250,
     height: 137,
+    backgroundColor: "#a50034",
+    borderRadius: 25,
   },
-  groupView11: {
-    position: "absolute",
-    top: 153,
-    left: 9,
+  time_group: {
     width: 320,
     height: 137,
   },
   text31: {
     position: "absolute",
-    top: 0,
-    left: -7,
-    fontSize:20,
-    fontWeight: "Bold",
+    top: 5,
+    left: -5,
+    fontSize: 17,
+    fontWeight: "700",
+    width: 50,
     color: "#212525",
     textAlign: "right",
   },
   text32: {
     position: "absolute",
     top: 28,
-    left: 6,
+    left: 10,
     fontSize: 14,
-    fontWeight: "Regular",
+    fontWeight: "500",
     color: "#bcc1cd",
     textAlign: "right",
   },
@@ -1268,25 +1084,26 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 16,
     left: 16,
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "600",
     color: "#212525",
     textAlign: "left",
   },
   text34: {
     position: "absolute",
-    top: 78,
+    top: 80,
     left: 51,
     fontSize: 12,
-
+ 
     color: "#212525",
     textAlign: "left",
   },
   text35: {
     position: "absolute",
-    top: 78,
+    top: 80,
     left: 40,
     fontSize: 12,
+ 
     color: "#212525",
     textAlign: "left",
   },
@@ -1359,7 +1176,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 16,
     left: 16,
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "600",
  
     color: "#fff",
@@ -1422,18 +1239,18 @@ const styles = StyleSheet.create({
   },
   text41: {
     position: "absolute",
-    top: 0,
+    top: 5,
     left: 0,
-    fontSize: 16,
-    fontWeight: "500",
- 
+    fontSize: 17,
+    width: 50,
+    fontWeight: "700",
     color: "#212525",
     textAlign: "right",
   },
   text42: {
     position: "absolute",
     top: 28,
-    left: 13,
+    left: 15,
     fontSize: 14,
     fontWeight: "500",
  
@@ -1463,9 +1280,9 @@ const styles = StyleSheet.create({
   },
   scheduleView: {
     position: "absolute",
-    top: 220,
-    left: 26,
-    width: 329,
+    top: 230,
+    left: 35,
+    width: '100%',
     height: 467,
   },
   rectangleView12: {
@@ -1507,8 +1324,8 @@ const styles = StyleSheet.create({
   },
   notificationPressable: {
     position: "absolute",
-    top: 53,
-    left: 319,
+    top: 73,
+    left: 325,
     width: 40,
     height: 40,
   },
@@ -1539,8 +1356,8 @@ const styles = StyleSheet.create({
   },
   pressable1: {
     position: "absolute",
-    top: 53,
-    left: 31,
+    top: 73,
+    left: 41,
     width: 40,
     height: 40,
   },
@@ -1549,23 +1366,23 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     fontSize: 20,
- 
     color: "#a50034",
     textAlign: "center",
   },
   view1: {
     position: "absolute",
-    top: 62,
-    left: 115,
-    width: 200,
+    top: 82,
+    left: 134,
+    width: 161,
     height: 23,
   },
   menuView: {
     position: "absolute",
     top: 0,
     left: 0,
-    width: 390,
-    height: 93,
+    width: '100%',
+    height: 100,
+    backgroundColor: 'red',
   },
   stylerReservationView: {
     position: "relative",
@@ -1575,9 +1392,57 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flex: 1,
     width: "100%",
-    height: 844,
+    height: "100%",
     overflow: "hidden",
   },
+  todaysReservationText: {
+    position: "absolute",
+    top: 0,
+    left: 31,
+    fontSize: 30,
+    letterSpacing: -1,
+    fontWeight: "600",
+    color: "#000",
+    textAlign: "left",
+    display: "flex",
+    alignItems: "center",
+    width: 300,
+    height: 47,
+  },
+  text0: {
+    position: "absolute",
+    top: 35,
+    left: 31,
+    fontSize: 14,
+    letterSpacing: -0.6,
+ 
+    color: "#8d8d8d",
+    textAlign: "left",
+  },
+  SplitlineView: {
+    position: "absolute",
+    top: 17,
+    left: 260,
+    borderStyle: "solid",
+    borderColor: "#000",
+    borderTopWidth: 2,
+    width: 100,
+    height: 1,
+  },
+  box: {
+    width: '100%',
+    paddingBottom: 20
+  },
+  wrapper: {
+    width: '100%',
+    height: '100%',
+    marginBottom: 500,
+  },
+  layoutWrapper: {
+    position: 'flex',
+    width: '100%',
+    height: '100%',
+  }
 });
 
-export default StylerReservation;
+export default TodayReservation;

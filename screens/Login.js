@@ -1,35 +1,32 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, } from "react";
 import { StyleSheet, View, Text, Pressable, Image, TextInput } from "react-native";
 import { AsyncStorage} from 'react-native';
 import { useNavigation } from "@react-navigation/native";
-import Component from "../components/Component";
+import FindMyPW from "../components/FindMyPW";
+import SignUpPage from "../components/SignUpPage";
 import axios from "axios";
+
 const loginApi = async (navigation, email, password) => {
-  let result = await axios.post('http://13.124.68.16/auth/signIn', {
+  let result = await axios.post('http://15.165.172.198/auth/signIn', {
     email,
     password
   });
-  console.log(result.data);
   if(result.data.code == Number(2011)){
     console.log('login failed');
     return;
   }
   await AsyncStorage.setItem('access_token', result.data.data.access_token);
   navigation.navigate("MainPage");
-  
-  
 }
+
 const SignInScreen = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   
   return (
-    <Pressable
-      style={styles.signInScreenPressable}
-      onPress={() => navigation.navigate("SignUp")}
-    >
+    <>
       <View style={styles.enterLoginView}>
         <View style={styles.enterEmailView}>
           <View style={styles.emailboxView} />
@@ -50,19 +47,19 @@ const SignInScreen = () => {
       </View>
 
       <View style={styles.signUpButtonView}>
-        <Text style={styles.styleReserveText}>
-          StyleReserve<Text style={styles.text2}>가 처음이세요?</Text>
-        </Text>
         <Pressable
-          style={styles.pressable}
-          onPress={() => navigation.navigate("SignUp")}
+          onPress={() => navigation.navigate("SignUpScreen")}
         >
-          <Text style={styles.text3}>이메일 회원가입</Text>
+          <SignUpPage />
         </Pressable>
-
       </View>
+
       <View style={styles.findPasswordButtonView}>
-        <Component />
+        <Pressable
+          onPress={() => navigation.navigate("FindPassword")}
+        >
+          <FindMyPW />
+        </Pressable>
       </View>
       <Pressable
         style={styles.loginButtonPressable}
@@ -78,9 +75,9 @@ const SignInScreen = () => {
         source={require("../assets/logo-grad.png")}
       />
       <View style={styles.splitView}>
-        <Text style={styles.orText}>{`--------------------- Or --------------------`}</Text>
+        <Text style={styles.orText}>{`-------------------- Or --------------------`}</Text>
       </View>
-    </Pressable>
+    </>
   );
 };
 
@@ -151,8 +148,8 @@ const styles = StyleSheet.create({
   },
   enterLoginView: {
     position: "absolute",
-    top: 338,
-    left: 31,
+    top: 380,
+    left: 41,
     width: 328,
     height: 97,
   },
@@ -168,23 +165,24 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   text3: {
-    fontSize: 13,
+    fontSize: 15,
     letterSpacing: -0.6,
+    top: 80,
+    left: 1,
     fontWeight: "700",
     color: "#a50034",
-    width: 100,
-    textAlign: "left",
+    textAlign: "center",
     opacity: 0.5,
   },
   pressable: {
     position: "absolute",
-    left: 165,
+    left: 150,
     top: 0,
   },
   signUpButtonView: {
     position: "absolute",
     top: 635,
-    left: 70,
+    left: 88,
     width: 238,
     height: 15,
   },
@@ -197,8 +195,8 @@ const styles = StyleSheet.create({
   },
   rectangleView: {
     position: "absolute",
-    top: 0,
-    left: 0,
+    top: 40,
+    left: 7,
     borderRadius: 50,
     backgroundColor: "#a50034",
     width: 128,
@@ -206,8 +204,8 @@ const styles = StyleSheet.create({
   },
   text4: {
     position: "absolute",
-    top: 13,
-    left: 31,
+    top: 53,
+    left: 38,
     fontSize: 16,
     color: "#fff",
     textAlign: "center",
@@ -226,15 +224,15 @@ const styles = StyleSheet.create({
   },
   serviceLogoIcon: {
     position: "absolute",
-    top: 135,
-    left: 126,
+    top: 190,
+    left: 132,
     width: 139,
     height: 168,
   },
   orText: {
     position: "absolute",
-    top: 0,
-    left: 35,
+    top: 68,
+    left: 44,
     fontSize: 12,
     color: "#757171",
     textAlign: "center",

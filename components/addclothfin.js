@@ -2,25 +2,26 @@ import * as React from "react";
 import { View, Image, StyleSheet, Text, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const Signupbanner = ({ onClose }) => {
+const Addclothfin = ({ onClose }) => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.signupbannerView}>
+    <View style={styles.addclothfinView}>
       <Image
         style={styles.icon}
         resizeMode="cover"
         source={require("../assets/check.png")}
       />
       <Text style={[styles.text2, styles.mt8]}>
-        <Text style={styles.text}>계정 생성이 완료되어{"\n"}로그인 화면으로 돌아갑니다</Text>
+        <Text style={styles.text}>등록이 완료되었습니다</Text>
+        <Text style={styles.text1}>옷장에서 확인이 가능합니다</Text>
       </Text>
       <Pressable
         style={[styles.groupPressable, styles.mt8]}
-        onPress={() => navigation.navigate("Login")}
+        onPress={() => navigation.navigate("MyCloset")}
       >
         <View style={styles.rectangleView} />
-        <Text style={styles.text3}>로그인 화면으로 돌아가기</Text>
+        <Text style={styles.text3}>돌아가기</Text>
       </Pressable>
     </View>
   );
@@ -28,58 +29,69 @@ const Signupbanner = ({ onClose }) => {
 
 const styles = StyleSheet.create({
   mt8: {
-    marginTop: 20,
+    marginTop: 8,
   },
   icon: {
     position: "relative",
-    width: 80,
-    height: 80,
+    width: 97,
+    height: 97,
     flexShrink: 0,
     overflow: "hidden",
   },
   text: {
-    marginBlockStart: 10,
+    marginBlockStart: 0,
     marginBlockEnd: 0,
-    width: 350,
+  },
+  text1: {
+    margin: 0,
   },
   text2: {
     position: "relative",
     fontSize: 14,
-    lineHeight: 15,
+    lineHeight: 17,
+ 
     color: "#323232",
     textAlign: "center",
-    width: 190,
-    height: 50,
+    width: 166,
+    height: 55,
   },
   rectangleView: {
     position: "absolute",
     top: 0,
-    left: 14,
+    left: 0,
     borderRadius: 50,
-    backgroundColor: "#a50034",
-    width: 200,
+    shadowColor: "rgba(0, 0, 0, 0.25)",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowRadius: 4,
+    elevation: 4,
+    shadowOpacity: 1,
+    width: 118,
     height: 40,
   },
   text3: {
     position: "absolute",
-    top: 12,
-    left: 19,
+    top: 9,
+    left: 0,
     fontSize: 16,
+ 
     color: "#fff",
     textAlign: "center",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    width: 192,
+    width: 118,
     height: 22,
   },
   groupPressable: {
     position: "relative",
-    width: 230,
+    width: 118,
     height: 40,
     flexShrink: 0,
   },
-  signupbannerView: {
+  addclothfinView: {
     position: "relative",
     borderRadius: 10,
     backgroundColor: "#fff",
@@ -96,4 +108,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Signupbanner;
+export default Addclothfin;

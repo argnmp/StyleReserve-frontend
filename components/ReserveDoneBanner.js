@@ -12,9 +12,9 @@ const Signupbanner1 = ({ onClose }) => {
         resizeMode="cover"
         source={require("../assets/check.png")}
       />
-      <Text style={[styles.text, styles.mt8]}>예약이 완료되었습니다.</Text>
+      <Text style={[styles.text]}>예약이 완료되었습니다.</Text>
       <Pressable
-        style={[styles.groupPressable, styles.mt8]}
+        style={[styles.groupPressable]}
         onPress={() => navigation.navigate("OverallStylerReservation")}
       >
         <View style={styles.rectangleView} />
@@ -25,9 +25,6 @@ const Signupbanner1 = ({ onClose }) => {
 };
 
 const styles = StyleSheet.create({
-  mt8: {
-    marginTop: 8,
-  },
   icon: {
     position: "relative",
     width: 97,
@@ -38,16 +35,15 @@ const styles = StyleSheet.create({
   text: {
     position: "relative",
     fontSize: 14,
-    lineHeight: 17,
-    fontFamily: "Roboto",
+    lineHeight: 65,
     color: "#323232",
     textAlign: "center",
-    width: 166,
+    width: 180,
     height: 55,
   },
   rectangleView: {
     position: "absolute",
-    top: 0,
+    top: 15,
     left: 0,
     backgroundColor: "#a50034",
     borderRadius: 50,
@@ -64,10 +60,10 @@ const styles = StyleSheet.create({
   },
   text1: {
     position: "absolute",
-    top: 9,
+    top: 27,
     left: 0,
     fontSize: 16,
-    fontFamily: "Roboto",
+ 
     color: "#fff",
     textAlign: "center",
     display: "flex",

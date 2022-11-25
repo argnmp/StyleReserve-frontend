@@ -1,14 +1,16 @@
 import * as React from "react";
 import { useState, useCallback } from "react";
-import { Text, StyleSheet, View, Pressable, Modal, Image, TextInput } from "react-native";
+import { Text, StyleSheet, View, Pressable, Modal, TextInput } from "react-native";
 import Signupbanner from "../components/SignUpBanner";
-import { useNavigation } from "@react-navigation/native";
 
 const SignUpScreen = () => {
-  
+  const [username, setName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [passwordconfirm, setPasswordConfirm] = useState();
+
     const [signUpButtonContainerVisible, setSignUpButtonContainerVisible] =
     useState(!true);
-
 
   const openSignUpButtonContainer = useCallback(() => {
     setSignUpButtonContainerVisible(true);
@@ -32,7 +34,7 @@ const SignUpScreen = () => {
             <TextInput
             style={styles.text2}
             placeholder="사용자 이름"
-            onChangeText={newText => setText(newText)}
+            onChangeText={newText => setName(newText)}
             />
           </View>
         </View>
@@ -43,7 +45,7 @@ const SignUpScreen = () => {
             <TextInput
             style={styles.text2}
             placeholder="이메일 주소"
-            onChangeText={newText => setText(newText)}
+            onChangeText={newText => setEmail(newText)}
             />
           </View>
         </View>
@@ -53,8 +55,8 @@ const SignUpScreen = () => {
             <View style={styles.enterBoxView2} />
             <TextInput
             style={styles.text2}
-            placeholder="영문으로 구성, 8자 이상"
-            onChangeText={newText => setText(newText)}
+            placeholder="6자 이상"
+            onChangeText={newText => setPassword(newText)}
             />
           </View>
         </View>
@@ -64,8 +66,8 @@ const SignUpScreen = () => {
             <View style={styles.enterBoxView3} />
             <TextInput
             style={styles.text2}
-            placeholder="영문으로 구성, 8자 이상"
-            onChangeText={newText => setText(newText)}
+            placeholder="6자 이상"
+            onChangeText={newText => setPasswordConfirm(newText)}
             />
           </View>
         </View>
@@ -75,16 +77,6 @@ const SignUpScreen = () => {
         >
           <View style={styles.buttonView} />
           <Text style={styles.text6}>회원가입하기</Text>
-        </Pressable>
-        <Pressable
-          style={styles.xMarkPressable}
-          onPress={() => navigation.navigate("Login")}
-        >
-          <Image
-            style={styles.icon}
-            resizeMode="cover"
-            source={require("../assets/close.png")}
-          />
         </Pressable>
       </View>
 
@@ -121,12 +113,12 @@ const styles = StyleSheet.create({
   },
   text: {
     position: "absolute",
-    top: 126,
+    top: 160,
     left: 32,
     fontSize: 38,
     letterSpacing: -2.1,
     fontWeight: "700",
-    fontFamily: "Roboto",
+ 
     color: "#a50034",
     textAlign: "left",
     display: "flex",
@@ -135,11 +127,11 @@ const styles = StyleSheet.create({
   },
   text1: {
     position: "absolute",
-    top: 180,
+    top: 204,
     left: 31,
     fontSize: 14,
     letterSpacing: -0.7,
-    fontFamily: "Roboto",
+ 
     color: "#6a6a6a",
     textAlign: "left",
   },
@@ -148,7 +140,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 1,
     fontSize: 13,
-    fontFamily: "Roboto",
+ 
     color: "#6a6a6a",
     textAlign: "left",
     display: "flex",
@@ -173,7 +165,7 @@ const styles = StyleSheet.create({
     left: 10.16,
     fontSize: 14,
     letterSpacing: -1.4,
-    fontFamily: "Roboto",
+ 
     color: "#b5b5b5",
     textAlign: "left",
     display: "flex",
@@ -190,8 +182,8 @@ const styles = StyleSheet.create({
   },
   usernameView: {
     position: "absolute",
-    top: 242,
-    left: 31,
+    top: 262,
+    left: 41,
     width: 328,
     height: 64.2,
   },
@@ -200,7 +192,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     fontSize: 13,
-    fontFamily: "Roboto",
+ 
     color: "#6a6a6a",
     textAlign: "left",
     display: "flex",
@@ -228,8 +220,8 @@ const styles = StyleSheet.create({
   },
   emailView: {
     position: "absolute",
-    top: 328,
-    left: 31,
+    top: 348,
+    left: 41,
     width: 328,
     height: 64.2,
   },
@@ -238,7 +230,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     fontSize: 13,
-    fontFamily: "Roboto",
+ 
     color: "#6a6a6a",
     textAlign: "left",
     display: "flex",
@@ -266,8 +258,8 @@ const styles = StyleSheet.create({
   },
   passwordView: {
     position: "absolute",
-    top: 414,
-    left: 31,
+    top: 434,
+    left: 41,
     width: 328,
     height: 64.2,
   },
@@ -276,7 +268,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     fontSize: 13,
-    fontFamily: "Roboto",
+ 
     color: "#6a6a6a",
     textAlign: "left",
     display: "flex",
@@ -304,15 +296,15 @@ const styles = StyleSheet.create({
   },
   confirmPasswordView: {
     position: "absolute",
-    top: 500,
-    left: 31,
+    top: 520,
+    left: 41,
     width: 328,
     height: 64.2,
   },
   buttonView: {
     position: "absolute",
     top: 0,
-    left: 0,
+    left: 10,
     borderRadius: 50,
     backgroundColor: "#a50034",
     width: 177,
@@ -321,10 +313,10 @@ const styles = StyleSheet.create({
   text6: {
     position: "absolute",
     top: 12,
-    left: 38,
+    left: 48,
     fontSize: 16,
     letterSpacing: -0.8,
-    fontFamily: "Roboto",
+ 
     color: "#fff",
     textAlign: "center",
     display: "flex",

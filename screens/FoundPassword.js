@@ -2,7 +2,7 @@ import * as React from "react";
 import { StyleSheet, View, Text, Pressable, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const ShowPassword = () => {
+const FoundPassword = () => {
   const navigation = useNavigation();
 
   return (
@@ -16,18 +16,11 @@ const ShowPassword = () => {
       </Pressable>
 
       <Text style={styles.text3}>
-        <Text style={styles.text1}>회원가입시 작성한 이메일로 비밀번호를 보내드렸으니 확인해주시기 바랍니다</Text>
+        <Text style={styles.text1}>회원가입시 작성한 이메일로 비밀번호를 보내드렸으니</Text>
       </Text>
-      <Pressable
-        style={styles.xMarkNormalPressable}
-        onPress={() => navigation.navigate("Login")}
-      >
-        <Image
-          style={styles.icon}
-          resizeMode="cover"
-          source={require("../assets/close.png")}
-        />
-      </Pressable>
+      <Text style={styles.text2}>
+        <Text style={styles.text1}>확인 후 다시 로그인 바랍니다</Text>
+      </Text>
     </View>
   );
 };
@@ -36,20 +29,19 @@ const styles = StyleSheet.create({
   rectangleView: {
     position: "absolute",
     top: 0,
-    left: 0,
+    left: 10,
     borderRadius: 50,
     backgroundColor: "#a50034",
     elevation: 4,
-    shadowOpacity: 1,
     width: 270,
     height: 40,
   },
   text: {
     position: "absolute",
-    top: 9,
-    left: 45,
+    top: 11,
+    left: 49,
     fontSize: 16,
-    fontFamily: "Roboto",
+ 
     color: "#fff",
     textAlign: "center",
     display: "flex",
@@ -69,31 +61,24 @@ const styles = StyleSheet.create({
     marginBlockStart: 0,
     marginBlockEnd: 5,
   },
-  text3: {
+  text2: {
     position: "absolute",
-    top: 388,
-    left: 63,
-    fontSize: 14,
+    top: 410,
+    left: 125,
+    fontSize: 17,
     letterSpacing: -0.7,
-    fontFamily: "Roboto",
+ 
     color: "#6a6a6a",
     textAlign: "center",
   },
-  icon: {
-    height: "100%",
-    width: "100%",
-    maxWidth: "100%",
-    overflow: "hidden",
-    maxHeight: "100%",
-  },
-  xMarkNormalPressable: {
+  text3: {
     position: "absolute",
-    left: "91.28%",
-    top: "1.18%",
-    right: "2.56%",
-    bottom: "95.97%",
-    width: "6.15%",
-    height: "2.84%",
+    top: 388,
+    left: 60,
+    fontSize: 17,
+    letterSpacing: -0.7,
+    color: "#6a6a6a",
+    textAlign: "center",
   },
   showPasswordView: {
     position: "relative",
@@ -108,4 +93,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ShowPassword;
+export default FoundPassword;

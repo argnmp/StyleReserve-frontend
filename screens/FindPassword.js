@@ -23,7 +23,7 @@ const FindPassword = () => {
       </View>
       <Pressable
         style={styles.pressable}
-        onPress={() => navigation.navigate("ShowPassword")}
+        onPress={() => navigation.navigate("FoundPassword")}
       >
         <View style={styles.rectangleView2} />
         <Text style={styles.text}>비밀번호 확인</Text>
@@ -32,16 +32,6 @@ const FindPassword = () => {
       <Text style={styles.userNameEmail}>
         <Text style={styles.text2}>{`회원가입시 작성한 User Name과 Email을 입력하세요`}</Text>
       </Text>
-      <Pressable
-        style={styles.xMarkNormalPressable}
-        onPress={() => navigation.navigate("Login")}
-      >
-        <Image
-          style={styles.icon}
-          resizeMode="cover"
-          source={require("../assets/close.png")}
-        />
-      </Pressable>
     </View>
   );
 };
@@ -50,7 +40,7 @@ const styles = StyleSheet.create({
   rectangleView: {
     position: "absolute",
     top: 0,
-    left: 0,
+    left: 10,
     borderRadius: 10,
     backgroundColor: "#fff",
     borderStyle: "solid",
@@ -62,7 +52,7 @@ const styles = StyleSheet.create({
   rectangleView1: {
     position: "absolute",
     top: 51.79,
-    left: 0,
+    left: 10,
     borderRadius: 10,
     backgroundColor: "#fff",
     borderStyle: "solid",
@@ -74,10 +64,9 @@ const styles = StyleSheet.create({
   userNameText: {
     position: "absolute",
     top: 16,
-    left: 9.81,
+    left: 24,
     fontSize: 14,
-    letterSpacing: -1.4,
-    fontFamily: "Roboto",
+    letterSpacing: -0.5,
     color: "#b5b5b5",
     textAlign: "left",
     display: "flex",
@@ -88,10 +77,9 @@ const styles = StyleSheet.create({
   emailText: {
     position: "absolute",
     top: 68,
-    left: 9.81,
+    left: 24,
     fontSize: 14,
-    letterSpacing: -1.4,
-    fontFamily: "Roboto",
+    letterSpacing: -0.5,
     color: "#b5b5b5",
     textAlign: "left",
     display: "flex",
@@ -109,7 +97,7 @@ const styles = StyleSheet.create({
   rectangleView2: {
     position: "absolute",
     top: 0,
-    left: 0,
+    left: 14,
     borderRadius: 50,
     backgroundColor: "#a50034",
     width: 177,
@@ -118,9 +106,9 @@ const styles = StyleSheet.create({
   text: {
     position: "absolute",
     top: 12,
-    left: 18,
+    left: 32,
     fontSize: 16,
-    fontFamily: "Roboto",
+ 
     color: "#fff",
     textAlign: "center",
     display: "flex",
@@ -138,57 +126,33 @@ const styles = StyleSheet.create({
   },
   text1: {
     position: "absolute",
-    top: 265,
-    left: 28,
+    top: 283,
+    left:41,
     fontSize: 42,
     letterSpacing: -2.1,
     fontWeight: "700",
-    fontFamily: "Roboto",
+ 
     color: "#a50034",
     textAlign: "left",
   },
   text2: {
-    fontFamily: "Roboto",
   },
   userNameText1: {
     fontWeight: "300",
-    fontFamily: "Roboto",
-  },
-  text3: {
-    fontFamily: "Roboto",
+ 
   },
   emailText1: {
     fontWeight: "300",
-    fontFamily: "Roboto",
-  },
-  text4: {
-    fontFamily: "Roboto",
+ 
   },
   userNameEmail: {
     position: "absolute",
-    top: 320,
-    left: 31,
+    top: 330,
+    left: 41,
     fontSize: 14,
     letterSpacing: -0.7,
     color: "#6a6a6a",
     textAlign: "left",
-  },
-  icon: {
-    height: "100%",
-    width: "100%",
-    maxWidth: "100%",
-    overflow: "hidden",
-    maxHeight: "100%",
-    display: "none",
-  },
-  xMarkNormalPressable: {
-    position: "absolute",
-    left: "88.97%",
-    top: "2.73%",
-    right: "4.87%",
-    bottom: "94.43%",
-    width: "6.15%",
-    height: "2.84%",
   },
   findPasswordView: {
     position: "relative",

@@ -13,11 +13,11 @@ const Alarmcenterbanner = ({ onClose }) => {
 const styles = StyleSheet.create({
   text: {
     position: "absolute",
-    top: 136,
+    top: 150,
     left: 75,
     fontSize: 14,
     lineHeight: 17,
-    fontFamily: "Nanum Gothic",
+ 
     color: "#323232",
     textAlign: "center",
     width: 166,
@@ -27,14 +27,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 23,
     left: 23,
-    fontSize: 22,
+    fontSize: 28,
     letterSpacing: -1.1,
     fontWeight: "600",
-    fontFamily: "Roboto",
     color: "#252525",
     textAlign: "left",
     width: 101,
-    height: 24,
+    height: 30,
   },
   alarmcenterbannerView: {
     position: "relative",

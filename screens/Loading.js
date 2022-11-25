@@ -1,21 +1,23 @@
 import * as React from 'react';
-import { Text, View, Image, StyleSheet } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient'
+import { Text, View, StyleSheet, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
-
-// You can import from local files
 import AssetExample from '../components/ServiceLogo';
 
-// or any pure javascript modules available in npm
-import { Card } from 'react-native-paper';
-
-export default function Loading() {
+const LoadingNext = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
-     <AssetExample />
-      <Text style={styles.smallparagraph}>LG STYLER RESERVATION SERVICE</Text>
-      <Text style={styles.bigparagraph}>STYLERESERVE</Text>
-      <Text style={styles.copyright}>ⓒ Dressing Sauce from Hanyang University</Text>
+      <Pressable
+        style={styles.pressable}
+        onPress={() => navigation.navigate("Login")}
+      >
+        <AssetExample />
+        <Text style={styles.smallparagraph}>LG STYLER RESERVATION SERVICE</Text>
+        <Text style={styles.bigparagraph}>STYLERESERVE</Text>
+        <Text style={styles.copyright}>ⓒ Dressing Sauce from Hanyang University</Text>
+      </Pressable>
     </View>
   );
 }
@@ -35,27 +37,25 @@ const styles = StyleSheet.create({
     width: 247,
     height: 247,
   },**/
+
   bigparagraph: {
-    margin: 0,
-    fontSize: 28,
-    fontFamily: "Roboto",
+    marginBottom: 270,
+    fontSize: 35,
     color: "#ffffff",
     fontWeight: 'bold',
     textAlign: 'center',
   },
   smallparagraph: {
-    marginTop: 20,
+    marginTop: 0,
     fontSize: 12,
-    fontFamily: "Roboto",
+ 
     color: "#CECECE",
     fontWeight: 'light',
     textAlign: 'center',
   },
   copyright: {
-    marginTop: 200,
-    marginBottom: 10,
+    marginBottom: 0,
     fontSize: 9,
-    fontFamily: "Roboto",
     color: "#eaeaea",
     fontWeight: 'light',
     textAlign: 'center',
@@ -67,6 +67,8 @@ const styles = StyleSheet.create({
     left: 86,
     fontSize: 12,
     letterSpacing: -0.6,
-    fontFamily: "Nanum Gothic",
+ 
     color: "#eaeaea",
     textAlign: "center", */
+
+export default LoadingNext;

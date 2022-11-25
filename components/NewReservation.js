@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     left: 0,
     fontSize: 8,
     fontWeight: "700",
-    fontFamily: "Nanum Gothic",
+ 
     color: "#ad8c8c",
     textAlign: "left",
     width: 59.75,
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     left: 41,
     fontSize: 13,
     fontWeight: "700",
-    fontFamily: "Nanum Gothic",
+ 
     color: "#444",
     textAlign: "left",
     width: 63.87,
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     left: 0,
     fontSize: 8,
     fontWeight: "700",
-    fontFamily: "Nanum Gothic",
+ 
     color: "#ad8c8c",
     textAlign: "left",
     width: 77,
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     left: 40,
     fontSize: 13,
     fontWeight: "700",
-    fontFamily: "Nanum Gothic",
+ 
     color: "#444",
     textAlign: "left",
   },
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     left: 52,
     fontSize: 16,
     letterSpacing: -0.8,
-    fontFamily: "BIZ UDGothic",
+ 
     color: "#fff",
     textAlign: "center",
     display: "flex",
@@ -368,7 +368,7 @@ const styles = StyleSheet.create({
     left: 0,
     fontSize: 8,
     fontWeight: "700",
-    fontFamily: "Nanum Gothic",
+ 
     color: "#ad8c8c",
     textAlign: "left",
     width: 77,
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
     left: 43,
     fontSize: 13,
     fontWeight: "700",
-    fontFamily: "Nanum Gothic",
+ 
     color: "#444",
     textAlign: "left",
   },

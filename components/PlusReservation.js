@@ -38,26 +38,6 @@ const PlusReservation = ({ onClose }) => {
   return (
     <>
       <View style={styles.plusReservationView}>
-        <View style={styles.groupView}>
-          <View style={styles.rectangleView} />
-          <Text style={styles.startWithText}>Start with</Text>
-          <Text style={styles.aMText}>10:30 AM</Text>
-          <Pressable
-            style={styles.outlineArrowsAltArrowD}
-            onPress={openOutlineArrowsAltArrowD}
-          >
-            <Image
-              style={styles.icon}
-              resizeMode="cover"
-              source={require("../assets/down-arrow.png")}
-            />
-          </Pressable>
-          <Image
-            style={styles.lineDuotoneTimeStopwatc}
-            resizeMode="cover"
-            source={require("../assets/clock.png")}
-          />
-        </View>
         <View style={styles.groupView1}>
           <View style={styles.numberofClothesView}>
             <View style={styles.rectangleView1} />
@@ -84,23 +64,6 @@ const PlusReservation = ({ onClose }) => {
           <View style={styles.rectangleView2} />
           <Text style={styles.text1}>예약 확정하기</Text>
         </Pressable>
-        <View style={styles.groupView3}>
-          <View style={styles.groupView2}>
-            <View style={styles.rectangleView3} />
-            <Text style={styles.courseSelectionText}>Course Selection</Text>
-            <Text style={styles.text2}>정장 / 코트 코스</Text>
-            <Image
-              style={styles.lineDuotoneHomeFurniture}
-              resizeMode="cover"
-              source={require("../assets/multiple.png")}
-            />
-          </View>
-          <Image
-            style={styles.outlineArrowsAltArrowD2}
-            resizeMode="cover"
-            source={require("../assets/down-arrow.png")}
-          />
-        </View>
       </View>
 
       <Modal
@@ -199,7 +162,6 @@ const styles = StyleSheet.create({
     left: 0,
     fontSize: 8,
     fontWeight: "700",
-    fontFamily: "Nanum Gothic",
     color: "#ad8c8c",
     textAlign: "left",
     width: 59.75,
@@ -211,7 +173,7 @@ const styles = StyleSheet.create({
     left: 41,
     fontSize: 13,
     fontWeight: "700",
-    fontFamily: "Nanum Gothic",
+ 
     color: "#444",
     textAlign: "left",
     width: 63.87,
@@ -261,7 +223,7 @@ const styles = StyleSheet.create({
     left: 0,
     fontSize: 8,
     fontWeight: "700",
-    fontFamily: "Nanum Gothic",
+ 
     color: "#ad8c8c",
     textAlign: "left",
     width: 120,
@@ -273,7 +235,7 @@ const styles = StyleSheet.create({
     left: 42,
     fontSize: 13,
     fontWeight: "700",
-    fontFamily: "Nanum Gothic",
+ 
     color: "#444",
     textAlign: "left",
   },
@@ -334,7 +296,7 @@ const styles = StyleSheet.create({
     left: 52,
     fontSize: 16,
     letterSpacing: -0.8,
-    fontFamily: "BIZ UDGothic",
+ 
     color: "#fff",
     textAlign: "center",
     display: "flex",
@@ -368,7 +330,7 @@ const styles = StyleSheet.create({
     left: 0,
     fontSize: 8,
     fontWeight: "700",
-    fontFamily: "Nanum Gothic",
+ 
     color: "#ad8c8c",
     textAlign: "left",
     width: 120,
@@ -380,7 +342,7 @@ const styles = StyleSheet.create({
     left: 43,
     fontSize: 13,
     fontWeight: "700",
-    fontFamily: "Nanum Gothic",
+ 
     color: "#444",
     textAlign: "left",
   },

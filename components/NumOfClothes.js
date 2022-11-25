@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 13,
     fontWeight: "500",
-    fontFamily: "Lexend",
+ 
     color: "#1f1f1f",
     textAlign: "left",
   },
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 13,
     fontWeight: "500",
-    fontFamily: "Lexend",
+ 
     color: "#a50034",
     textAlign: "left",
   },
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 13,
     fontWeight: "500",
-    fontFamily: "Lexend",
+ 
     color: "#1f1f1f",
     textAlign: "left",
   },
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 13,
     fontWeight: "500",
-    fontFamily: "Lexend",
+ 
     color: "#1f1f1f",
     textAlign: "left",
   },
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 13,
     fontWeight: "500",
-    fontFamily: "Lexend",
+ 
     color: "#1f1f1f",
     textAlign: "left",
   },

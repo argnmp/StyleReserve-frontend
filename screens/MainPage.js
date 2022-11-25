@@ -18,24 +18,17 @@ const MainPage = () => {
   return (
     <>
       <View style={styles.mainPageView}>
-        <View style={styles.view}>
-          <Image
-            style={styles.frameIcon}
-            resizeMode="cover"
-            source={require("../assets/notification.png")}
-          />
-        </View>
         <View style={styles.view2}>
           <View style={styles.navigationBarView} />
           <View style={styles.frameView}>
             <Image
               style={styles.homeIcon}
               resizeMode="cover"
-              source={require("../assets/home_fill.png")}
+              source={require("../assets/home.png")}
             />
             <Pressable
               style={[styles.calendarPressable, styles.ml74]}
-              onPress={() => navigation.navigate("OverallStylerReservation")}
+              onPress={() => navigation.navigate("TodayReservation")}
             >
               <Image
                 style={styles.icon}
@@ -63,8 +56,8 @@ const MainPage = () => {
                 source={require("../assets/user.png")}
               />
             </Pressable>
+            <View style={styles.rectangleView} />
           </View>
-          <View style={styles.rectangleView} />
         </View>
         <View style={styles.view3}>
           <View style={styles.rectangleView1} />
@@ -125,7 +118,7 @@ const MainPage = () => {
         </View>
         <Pressable
           style={styles.pressable}
-          onPress={() => navigation.navigate("OverallStylerReservation")}
+          onPress={() => navigation.navigate("TodayReservation")}
         >
           <Image
             style={styles.wardrobeRenovationWinter1Icon}
@@ -134,7 +127,7 @@ const MainPage = () => {
           />
           <Text style={styles.stylerReservationText}>Styler Reservation</Text>
           <Text style={styles.text15}>
-          원하는 시간에 스타일러 사용을 예약하여 깔끔하고 정돈된 옷을 입어보세요
+          원하는 시간에 스타일러 사용을 예약하여{"\n"}깔끔하고 정돈된 옷을 입어보세요
           </Text>
         </Pressable>
         <Pressable
@@ -148,7 +141,7 @@ const MainPage = () => {
           />
           <Text style={styles.stylingReservationText}>Styling Reservation</Text>
           <Text style={styles.text18}>
-          중요한 약속에 입을 옷을 미리 예약하고 스타일러를 전날 사용해보세요
+          중요한 약속에 입을 옷을 미리 예약하고{"\n"}스타일러를 전날 사용해보세요
           </Text>
         </Pressable>
       </View>
@@ -165,7 +158,7 @@ const MainPage = () => {
 
 const styles = StyleSheet.create({
   mt4: {
-    marginTop: 4,
+    marginTop: 6,
   },
   ml74: {
     marginLeft: 74,
@@ -208,8 +201,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   navigationBarView: {
-    position: "absolute",
-    top: 0,
+    position: "relative",
+    top: 30,
     left: 0,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -222,8 +215,8 @@ const styles = StyleSheet.create({
     shadowRadius: 40,
     elevation: 40,
     shadowOpacity: 1,
-    width: 390,
-    height: 73,
+    width: 415,
+    height: 93,
   },
   homeIcon: {
     position: "relative",
@@ -268,8 +261,8 @@ const styles = StyleSheet.create({
   },
   frameView: {
     position: "absolute",
-    top: 21,
-    left: 26,
+    top: 51,
+    left: 41,
     flexDirection: "row",
     paddingHorizontal: 10,
     paddingVertical: 0,
@@ -279,8 +272,8 @@ const styles = StyleSheet.create({
   },
   rectangleView: {
     position: "absolute",
-    top: 17,
-    left: 31,
+    top: -4,
+    left: 4.5,
     borderRadius: 10,
     backgroundColor: "rgba(165, 0, 52, 0.2)",
     width: 34,
@@ -296,11 +289,9 @@ const styles = StyleSheet.create({
   rectangleView1: {
     position: "absolute",
     top: 105,
-    left: 14.42,
-    borderBottomRightRadius: 30,
-    borderBottomLeftRadius: 30,
+    left: 0,
     backgroundColor: "#a50034",
-    width: 390,
+    width: 600,
     height: 333,
   },
   rectangleView2: {
@@ -341,7 +332,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     lineHeight: 30,
     fontWeight: "700",
-    fontFamily: "Roboto",
+ 
     color: "#fff",
     textAlign: "left",
     width: 200,
@@ -350,9 +341,9 @@ const styles = StyleSheet.create({
   oOOText1: {
     position: "relative",
     fontSize: 52,
-    lineHeight: 40,
+    lineHeight: 50,
     fontWeight: "800",
-    fontFamily: "Roboto",
+ 
     color: "#fff",
     textAlign: "left",
     width: 200,
@@ -360,30 +351,27 @@ const styles = StyleSheet.create({
   },
   view4: {
     position: "absolute",
-    top: 51,
+    top: 70,
     left: 31,
     width: 147,
     height: 39,
     flexDirection: "column",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
   },
   brokenEssentionalUITS: {
     position: "absolute",
-    top: 156,
-    left: 203,
+    top: 171,
+    left: 218,
     width: 20,
     height: 19,
     overflow: "hidden",
   },
   text3: {
     position: "absolute",
-    top: 156,
-    left: 53,
+    top: 171,
+    left: 68,
     fontSize: 15,
     letterSpacing: -1.5,
     fontWeight: "700",
-    fontFamily: "Roboto",
     color: "#fff",
     textAlign: "left",
     display: "flex",
@@ -392,12 +380,11 @@ const styles = StyleSheet.create({
   },
   text4: {
     position: "absolute",
-    top: 156,
-    left: 226,
+    top: 171,
+    left: 241,
     fontSize: 15,
     letterSpacing: -1.5,
     fontWeight: "700",
-    fontFamily: "Roboto",
     color: "#fff",
     textAlign: "left",
     display: "flex",
@@ -406,16 +393,16 @@ const styles = StyleSheet.create({
   },
   bulletListIcon: {
     position: "absolute",
-    top: 157,
-    left: 30,
+    top: 171,
+    left: 45,
     width: 20,
     height: 19,
     overflow: "hidden",
   },
   rectangleView4: {
     position: "absolute",
-    top: 0,
-    left: 0,
+    top: 15,
+    left: 10,
     borderRadius: 20,
     backgroundColor: "#fff",
     width: 154,
@@ -423,29 +410,22 @@ const styles = StyleSheet.create({
   },
   text5: {
     position: "absolute",
-    top: 0.36,
-    left: 0,
-    fontSize: 20,
+    top: 15,
+    left: 15,
+    fontSize: 25,
     letterSpacing: -1,
     fontWeight: "700",
-    fontFamily: "Roboto",
     color: "#a50034",
     textAlign: "left",
     display: "flex",
     alignItems: "center",
     width: 118.93,
-    height: 14,
-    transform: [
-      {
-        rotate: "-0.17deg",
-      },
-    ],
+    height: 30,
   },
   may2021Text: {
     flex: 1,
     position: "relative",
     fontSize: 11,
-    fontFamily: "Inter",
     color: "#cfd5e2",
     textAlign: "left",
   },
@@ -454,29 +434,22 @@ const styles = StyleSheet.create({
     position: "relative",
     fontSize: 11,
     fontWeight: "500",
-    fontFamily: "Inter",
     color: "#6f7277",
     textAlign: "left",
   },
   clistView: {
     position: "absolute",
-    top: 31.39,
-    left: 5,
+    top: 50,
+    left: 15,
     width: 123.64,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-    transform: [
-      {
-        rotate: "-0.18deg",
-      },
-    ],
   },
   may2021Text1: {
     flex: 1,
     position: "relative",
     fontSize: 11,
-    fontFamily: "Inter",
     color: "#cfd5e2",
     textAlign: "left",
   },
@@ -485,29 +458,22 @@ const styles = StyleSheet.create({
     position: "relative",
     fontSize: 11,
     fontWeight: "500",
-    fontFamily: "Inter",
     color: "#6f7277",
     textAlign: "left",
   },
   clistView1: {
     position: "absolute",
-    top: 49.44,
-    left: 5.07,
+    top: 65,
+    left: 15,
     width: 123.59,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-    transform: [
-      {
-        rotate: "-0.18deg",
-      },
-    ],
   },
   may2021Text2: {
     flex: 1,
     position: "relative",
     fontSize: 11,
-    fontFamily: "Inter",
     color: "#cfd5e2",
     textAlign: "left",
   },
@@ -516,23 +482,17 @@ const styles = StyleSheet.create({
     position: "relative",
     fontSize: 11,
     fontWeight: "500",
-    fontFamily: "Inter",
     color: "#6f7277",
     textAlign: "left",
   },
   clistView2: {
     position: "absolute",
-    top: 67.39,
-    left: 5.14,
+    top: 80,
+    left: 15,
     width: 123.82,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-    transform: [
-      {
-        rotate: "-0.18deg",
-      },
-    ],
   },
   groupView: {
     position: "absolute",
@@ -550,8 +510,8 @@ const styles = StyleSheet.create({
   },
   rectangleView5: {
     position: "absolute",
-    top: 0,
-    left: 0,
+    top: 15,
+    left: 10,
     borderRadius: 20,
     backgroundColor: "#fff",
     width: 154,
@@ -559,29 +519,22 @@ const styles = StyleSheet.create({
   },
   text9: {
     position: "absolute",
-    top: 15,
-    left: 13,
-    fontSize: 20,
+    top: 32,
+    left: 25,
+    fontSize: 25,
     letterSpacing: -1,
     fontWeight: "700",
-    fontFamily: "Roboto",
     color: "#a50034",
     textAlign: "left",
     display: "flex",
     alignItems: "center",
     width: 118.93,
-    height: 21.91,
-    transform: [
-      {
-        rotate: "-0.17deg",
-      },
-    ],
+    height: 29,
   },
   may2021Text3: {
     flex: 1,
     position: "relative",
     fontSize: 11,
-    fontFamily: "Inter",
     color: "#cfd5e2",
     textAlign: "left",
   },
@@ -590,14 +543,13 @@ const styles = StyleSheet.create({
     position: "relative",
     fontSize: 11,
     fontWeight: "500",
-    fontFamily: "Inter",
     color: "#6f7277",
     textAlign: "left",
   },
   clistView3: {
     position: "absolute",
-    top: 50.39,
-    left: 18,
+    top: 70,
+    left: 25,
     width: 123.64,
     flexDirection: "row",
     alignItems: "center",
@@ -612,7 +564,6 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "relative",
     fontSize: 11,
-    fontFamily: "Inter",
     color: "#cfd5e2",
     textAlign: "left",
   },
@@ -621,29 +572,22 @@ const styles = StyleSheet.create({
     position: "relative",
     fontSize: 11,
     fontWeight: "500",
-    fontFamily: "Inter",
     color: "#6f7277",
     textAlign: "left",
   },
   clistView4: {
     position: "absolute",
-    top: 68.44,
-    left: 18.07,
+    top: 85,
+    left: 25,
     width: 123.59,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-    transform: [
-      {
-        rotate: "-0.18deg",
-      },
-    ],
   },
   may2021Text5: {
     flex: 1,
     position: "relative",
     fontSize: 11,
-    fontFamily: "Inter",
     color: "#cfd5e2",
     textAlign: "left",
   },
@@ -652,23 +596,17 @@ const styles = StyleSheet.create({
     position: "relative",
     fontSize: 11,
     fontWeight: "500",
-    fontFamily: "Inter",
     color: "#6f7277",
     textAlign: "left",
   },
   clistView5: {
     position: "absolute",
-    top: 86.39,
-    left: 18.14,
+    top: 100,
+    left: 26,
     width: 123.82,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-    transform: [
-      {
-        rotate: "-0.18deg",
-      },
-    ],
   },
   groupView1: {
     position: "absolute",
@@ -689,7 +627,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     borderRadius: 24,
-    width: 327,
+    width: 353,
     height: 179,
     opacity: 0.4,
   },
@@ -697,10 +635,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 20,
     left: 20,
-    fontSize: 25,
+    fontSize: 35,
     letterSpacing: -0.5,
     fontWeight: "700",
-    fontFamily: "Roboto",
     color: "#a50034",
     textAlign: "left",
   },
@@ -708,16 +645,15 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 22,
     left: 20,
-    fontSize: 12,
+    fontSize: 15,
     letterSpacing: -1.2,
     width: 200,
-    fontFamily: "Roboto",
     color: "#1e1d1d",
     textAlign: "left",
   },
   pressable: {
     position: "absolute",
-    top: 359,
+    top: 370,
     left: 31,
     borderRadius: 24,
     backgroundColor: "#fff",
@@ -732,7 +668,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderColor: "rgba(0, 0, 0, 0.2)",
     borderWidth: 1,
-    width: 328,
+    width: 355,
     height: 180,
   },
   icon3: {
@@ -740,17 +676,17 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     borderRadius: 24,
-    width: 327,
+    width: 352,
     height: 179,
+    opacity: 0.4,
   },
   stylingReservationText: {
     position: "absolute",
     top: 21,
     left: 20,
-    fontSize: 25,
+    fontSize: 35,
     letterSpacing: -0.5,
     fontWeight: "700",
-    fontFamily: "Roboto",
     color: "#a50034",
     textAlign: "left",
   },
@@ -758,16 +694,15 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 22,
     left: 20,
-    fontSize: 12,
+    fontSize: 15,
     letterSpacing: -1.2,
     width: 200,
-    fontFamily: "Roboto",
     color: "#1e1d1d",
     textAlign: "left",
   },
   pressable1: {
     position: "absolute",
-    top: 560,
+    top: 575,
     left: 31,
     borderRadius: 24,
     backgroundColor: "#fff",
@@ -782,7 +717,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderColor: "rgba(0, 0, 0, 0.2)",
     borderWidth: 1,
-    width: 328,
+    width: 355,
     height: 180,
   },
   mainPageView: {

@@ -11,7 +11,7 @@ export default function AssetExample() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 200,
+    marginTop: 180,
     alignItems: 'center',
     backgroundColor: '#A50034',
     padding: 0,
@@ -19,8 +19,8 @@ const styles = StyleSheet.create({
 
   
   logo: {
-    height: 180,
-    width: 180,
+    height: 210,
+    width: 210,
   }
 });
 
