@@ -17,6 +17,8 @@ import TodayReservation from "./screens/TodayReservation";
 import personalStylingCalender from "./screens/personalstylingCalendar";
 import reserveclothes from "./screens/reserveclothes";
 
+import Layout from "./screens/layout";
+
 
 const Stack = createStackNavigator();
 
@@ -32,7 +34,7 @@ const AppNavigator = () => {
       }}
     >
 
-      <Stack.Screen name="Loading" component={TodayReservation} options={{ headerShown: false }} />
+      <Stack.Screen name="Loading" component={Login} options={{ headerShown: false }} />
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
       <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{ headerShown: false }} />
       <Stack.Screen name="FindPassword" component={FindPassword} options={{ headerShown: false }} />
@@ -46,6 +48,7 @@ const AppNavigator = () => {
       <Stack.Screen name="MyPage" component={MyPage} options={{ headerShown: false }} />
       <Stack.Screen name="personalstylingCalendar" component={personalStylingCalender} options={{ headerShown: false }} />
       <Stack.Screen name="reserveclothes" component={reserveclothes} options={{ headerShown: false }} />
+      <Stack.Screen name="Layout" component={Layout} options={{ headerShown: false }} />
     </Stack.Navigator>
     
   );

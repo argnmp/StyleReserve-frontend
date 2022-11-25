@@ -7,6 +7,7 @@ import PlusReservation from "../components/PlusReservation";
 import NewReservation from "../components/NewReservation";
 import Alarmcenterbanner from "../components/Alarmcenterbanner";
 import NavigationBar from "../components/NavigationBar";
+import Layout from "./layout";
 
 // 오늘 날짜의 데이터 불러오기
 /**
@@ -120,114 +121,76 @@ const TodayReservation = () => {
   },[]);
   
   return (
-      <View style={styles.layoutWrapper}>
-    
-    <View style={styles.menuView}>
-        
-        <Pressable
-        style={styles.notificationPressable}
-        onPress={openNotificationContainer}
-        >
-            <View style={styles.rectangleView13} />
-            <Image
-              style={styles.notificationIcon}
-              resizeMode="cover"
-              source={require("../assets/notification-black.png")} />
-        </Pressable>
-        <Pressable
-        style={styles.pressable1}
-        onPress={() => navigation.navigate("MainPage")}
-        >
-            <View style={styles.rectangleView14} />
-            <Image
-              style={styles.arrowLeft}
-              resizeMode="cover"
-              source={require("../assets/back-arrow.png")} />
-        </Pressable>
-        <View style={styles.view1}>
-            <Text style={styles.wed15SeptemperText}>Styler Reservation</Text>
+    <Layout title={'Styler Reservation'}>
+        <View style={styles.calendarView}>
+          <Text
+            style={styles.todaysReservationText}
+          >
+            {`Today’s Reservation  `}
+          </Text>
+          <Text style={styles.text0}>
+            오늘의 스타일러 예약 일정을 확인해보세요
+          </Text>
+
         </View>
-    </View>
-    
-    <View style={styles.wrapper}>
-    <View style={styles.calendarView}>
-      <Text
-        style={styles.todaysReservationText}
+        <ScrollView style={styles.scheduleView}>
+          {reserveData}
+        </ScrollView>
+        <Pressable style={styles.pressable} onPress={openContainer1}>
+          <View style={styles.rectangleView6} />
+          <Text style={styles.text17}>새로운 예약하기</Text>
+        </Pressable>
+
+
+
+      <Modal animationType="fade" transparent visible={container1Visible}>
+        <View style={styles.container1Overlay}>
+          <Pressable style={styles.container1Bg} onPress={closeContainer1} />
+          <PlusReservation onClose={closeContainer1} />
+        </View>
+      </Modal>
+
+      <Modal animationType="fade" transparent visible={ellipsisV1IconVisible}>
+        <View style={styles.ellipsisV1IconOverlay}>
+          <Pressable
+            style={styles.ellipsisV1IconBg}
+            onPress={closeEllipsisV1Icon} />
+          <NewReservation onClose={closeEllipsisV1Icon} />
+        </View>
+      </Modal>
+
+      <Modal animationType="fade" transparent visible={ellipsisV1Icon1Visible}>
+        <View style={styles.ellipsisV1Icon1Overlay}>
+          <Pressable
+            style={styles.ellipsisV1Icon1Bg}
+            onPress={closeEllipsisV1Icon1} />
+          <NewReservation onClose={closeEllipsisV1Icon1} />
+        </View>
+      </Modal>
+
+      <Modal animationType="fade" transparent visible={ellipsisV1Icon2Visible}>
+        <View style={styles.ellipsisV1Icon2Overlay}>
+          <Pressable
+            style={styles.ellipsisV1Icon2Bg}
+            onPress={closeEllipsisV1Icon2} />
+          <NewReservation onClose={closeEllipsisV1Icon2} />
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent
+        visible={notificationContainerVisible}
       >
-          {`Today’s Reservation  `}
-      </Text>
-      <Text style={styles.text0}>
-          오늘의 스타일러 예약 일정을 확인해보세요
-      </Text>
-      <View style={styles.SplitlineView} />
-
-    </View>
-    <ScrollView style={styles.scheduleView}>
-        {reserveData}
-        
-    </ScrollView>
-    <Pressable style={styles.pressable} onPress={openContainer1}>
-      <View style={styles.rectangleView6} />
-      <Text style={styles.text17}>새로운 예약하기</Text>
-    </Pressable>
-    
-    <View style={styles.view}>
-        <NavigationBar select={2}/>
-    </View>
-
-    </View>
-    
-      
-    
-        
-        
-        <Modal animationType="fade" transparent visible={container1Visible}>
-          <View style={styles.container1Overlay}>
-            <Pressable style={styles.container1Bg} onPress={closeContainer1} />
-            <PlusReservation onClose={closeContainer1} />
-          </View>
-        </Modal>
-        
-        <Modal animationType="fade" transparent visible={ellipsisV1IconVisible}>
-          <View style={styles.ellipsisV1IconOverlay}>
-            <Pressable
-              style={styles.ellipsisV1IconBg}
-              onPress={closeEllipsisV1Icon} />
-            <NewReservation onClose={closeEllipsisV1Icon} />
-          </View>
-        </Modal>
-        
-        <Modal animationType="fade" transparent visible={ellipsisV1Icon1Visible}>
-          <View style={styles.ellipsisV1Icon1Overlay}>
-            <Pressable
-              style={styles.ellipsisV1Icon1Bg}
-              onPress={closeEllipsisV1Icon1} />
-            <NewReservation onClose={closeEllipsisV1Icon1} />
-          </View>
-        </Modal>
-        
-        <Modal animationType="fade" transparent visible={ellipsisV1Icon2Visible}>
-          <View style={styles.ellipsisV1Icon2Overlay}>
-            <Pressable
-              style={styles.ellipsisV1Icon2Bg}
-              onPress={closeEllipsisV1Icon2} />
-            <NewReservation onClose={closeEllipsisV1Icon2} />
-          </View>
-        </Modal>
-        
-        <Modal
-          animationType="fade"
-          transparent
-          visible={notificationContainerVisible}
-        >
-          <View style={styles.notificationContainerOverlay}>
-            <Pressable
-              style={styles.notificationContainerBg}
-              onPress={closeNotificationContainer} />
-            <Alarmcenterbanner onClose={closeNotificationContainer} />
-          </View>
-        </Modal>
+        <View style={styles.notificationContainerOverlay}>
+          <Pressable
+            style={styles.notificationContainerBg}
+            onPress={closeNotificationContainer} />
+          <Alarmcenterbanner onClose={closeNotificationContainer} />
         </View>
+      </Modal>
+
+    </Layout>
         
   );
 };
@@ -328,8 +291,6 @@ const styles = StyleSheet.create({
     height: 117,
   },
   text_position: {
-    top: 30,
-    left: 20,
   },
   text: {
     position: "absolute",
@@ -913,11 +874,8 @@ const styles = StyleSheet.create({
     height: 57,
   },
   calendarView: {
-    position: "absolute",
-    top: 137,
-    left: 8,
-    width: 375,
-    height: 69,
+    paddingHorizontal: 30,
+    width: '100%',
   },
   rectangleView8: {
     position: "absolute",
@@ -928,7 +886,6 @@ const styles = StyleSheet.create({
     height: 467,
   },
   text_st: {
-    position: "absolute",
     top: 5,
     left: -15,
     fontSize: 20,
@@ -1028,17 +985,13 @@ const styles = StyleSheet.create({
     maxHeight: "100%",
   },
   info_group: {
-    position: "absolute",
-    top: 0,
-    left: 90,
-    width: 250,
-    height: 137,
+    padding: 20,
+    flex: '1 1 0', 
     backgroundColor: "#a50034",
     borderRadius: 25,
   },
   time_group: {
-    width: 320,
-    height: 137,
+    flex: '0 1 0',
   },
   text31: {
     position: "absolute",
@@ -1279,11 +1232,9 @@ const styles = StyleSheet.create({
     height: 467,
   },
   scheduleView: {
-    position: "absolute",
-    top: 230,
-    left: 35,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
     width: '100%',
-    height: 467,
   },
   rectangleView12: {
     position: "absolute",
@@ -1396,9 +1347,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   todaysReservationText: {
-    position: "absolute",
-    top: 0,
-    left: 31,
     fontSize: 30,
     letterSpacing: -1,
     fontWeight: "600",
@@ -1410,27 +1358,16 @@ const styles = StyleSheet.create({
     height: 47,
   },
   text0: {
-    position: "absolute",
-    top: 35,
-    left: 31,
     fontSize: 14,
     letterSpacing: -0.6,
  
     color: "#8d8d8d",
     textAlign: "left",
   },
-  SplitlineView: {
-    position: "absolute",
-    top: 17,
-    left: 260,
-    borderStyle: "solid",
-    borderColor: "#000",
-    borderTopWidth: 2,
-    width: 100,
-    height: 1,
-  },
   box: {
     width: '100%',
+    flex: 1,
+    flexDirection: 'row',
     paddingBottom: 20
   },
   wrapper: {
