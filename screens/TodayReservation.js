@@ -35,11 +35,12 @@ const fetchApi = async (setReserveData, openContainer1, setTargetCount, setTarge
 
         let courses = ["미세먼지 제거", "눈/비 건조", "정장/코트", "스팀살균", "표준"];
 
+        const start_time = new Date(i.start_time);
         // 예약한 시간 별로 섹션 묶어서 보여줌
         dates.push(
         <View key={key++} style={styles.box}>
             <View style = {styles.time_group}>
-                <Text style = {styles.text_st}>{i.start_time.slice( 11, 16 )}</Text>
+                <Text style = {styles.text_st}>{start_time.getHours()}:{start_time.getMinutes()}</Text>
                 <Text style = {styles.text_et}>+{i.course.duration}분</Text>
             </View>
             <View style = {[styles.info_group, i.total_count >= 5 && styles.inactive]}>
@@ -122,7 +123,7 @@ const TodayReservation = ({datetime}) => {
       <Modal animationType="fade" transparent visible={addContainerVisible}>
         <View style={styles.container1Overlay}>
           <Pressable style={styles.container1Bg} onPress={closeAddContainer} />
-          <AddReservation onClose={closeAddContainer} />
+          <AddReservation onClose={closeAddContainer} datetime={datetime}/>
         </View>
       </Modal>
 

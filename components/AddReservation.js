@@ -11,20 +11,28 @@ import ReserveDoneBanner from "../components/ReserveDoneBanner";
 import RNPickerSelect from 'react-native-picker-select';
 
 const courses = ["미세먼지 제거", "눈/비 건조", "정장/코트", "스팀살균", "표준"];
-const addSrmember = async (selectValue, targetSr) => {
-  let result = await axios.post('http://15.165.172.198/sr/addMember', {
+const addSreserve = async (start_time, course_id, count) => {
+  let result = await axios.post('http://15.165.172.198/sr/addReserve', {
     access_token: await AsyncStorage.getItem('access_token'),
-    sr_id: targetSr,
-    count: selectValue,
+    start_time,
+    course_id,
+    count,
   });
   console.log(result.data);
 
 }
-const AddReservation = ({ onClose, targetCount, targetSr }) => {
+const AddReservation = ({ onClose, datetime}) => {
+    const selectList = [];
+    const selectCountList = [];
+    for (let i = 1; i <= 5; i++) {
+        selectList.push({ label: `${courses[i-1]}`, value: i });
+        selectCountList.push({ label: `${i}`, value: i});
+    }
     const [containerVisible, setContainerVisible] = useState(false);
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [selectTime, setSelectTime] = useState(new Date());
+    const [selectTime, setSelectTime] = useState(null);
     const [selectCourse, setSelectCourse] = useState(null);
+    const [selectCount, setSelectCount] = useState(null);
 
     const navigation = useNavigation();
     const openContainer = useCallback(() => {
@@ -44,17 +52,22 @@ const AddReservation = ({ onClose, targetCount, targetSr }) => {
 
     const handleConfirm = (date) => {
         hideDatePicker();
-        setSelectTime(new Date(date))
+        const dat = new Date(date);
+        dat.setFullYear(datetime.getFullYear());
+        dat.setMonth(datetime.getMonth());
+        dat.setDate(datetime.getDate());
+        console.log(dat);
+        setSelectTime(dat)
     };
     return (
         <>
             <View style={styles.addReservationView}>
                 <View style={styles.container}>
-                    <TouchableOpacity onPress={showDatePicker}>
+                    <TouchableOpacity onPress={showDatePicker} style={styles.containerInner}>
                         <TextInput
                             pointerEvents="none"
                             style={styles.textInput}
-                            placeholder={selectTime.toTimeString()}
+                            placeholder={selectTime ? selectTime.toTimeString() : "시간을 선택해주세요"}
                             placeholderTextColor="#000000"
                             value={selectTime}
                         />
@@ -65,24 +78,28 @@ const AddReservation = ({ onClose, targetCount, targetSr }) => {
                             onCancel={hideDatePicker}
                         />
                     </TouchableOpacity>	
-                    <View style={{ width: 200, marginBottom: 20 }}>
+                    <View style={styles.containerInner}>
                         <RNPickerSelect
                             onValueChange={(value) => setSelectCourse(value)}
                             style={{ ...pickerSelectStyles }}
                             placeholder={{
                                 label: "코스를 선택해주세요",
                             }}
-                            items={[
-                                {label: courses[1], value: 1},
-                                {label: courses[2], value: 2},
-                                {label: courses[3], value: 2},
-                                {label: courses[4], value: 2},
-                                {label: courses[5], value: 2},
-                            ]}
+                            items={selectList}
+                        />
+                    </View>
+                    <View style={styles.containerInner}>
+                        <RNPickerSelect
+                            onValueChange={(value) => setSelectCount(value)}
+                            style={{ ...pickerSelectStyles }}
+                            placeholder={{
+                                label: "옷의 개수를 선택해주세요",
+                            }}
+                            items={selectCountList}
                         />
                     </View>
                     <Pressable style={styles.pressable} onPress={() => {
-                        addSreserve(selectValue, targetSr);
+                        addSreserve(selectTime, selectCourse, selectCount);
                         navigation.pop();
                     }}>
                         <View style={styles.rectangleView2} />
@@ -268,7 +285,7 @@ const styles = StyleSheet.create({
   pressable: {
     width: 233,
     height: 42,
-    marginTop: 20,
+    margin: 10,
   },
   rectangleView3: {
     position: "absolute",
@@ -335,11 +352,10 @@ const styles = StyleSheet.create({
     height: 46,
   },
   addReservationView: {
-    position: "relative",
     borderRadius: 10,
     backgroundColor: "#fff",
     width: 380,
-    height: 200,
+    height: 300,
     maxWidth: "90%",
     maxHeight: "90%",
   },
@@ -365,32 +381,33 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: '100%',
+        padding: 30,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    containerInner: {
+        width: '100%',
+        margin: 5,
     }
 }
 );
 const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 4,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: 'purple',
-    borderRadius: 8,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
+    inputIOS: {
+        fontSize: 16,
+        height: 50,
+        borderWidth: 2,
+        borderRadius: 12,
+        padding: 10,
+        borderColor: '#a50034',
+    },
+    inputAndroid: {
+        fontSize: 16,
+        height: 50,
+        borderWidth: 2,
+        borderRadius: 12,
+        padding: 10,
+        borderColor: '#a50034',
+    },
 });
 
 

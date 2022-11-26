@@ -18,25 +18,26 @@ const App = () => {
 
     const loadItems = (day) => {
 
+      console.log('loadItems', day);
       let i = 0;
         const time = day.timestamp + i * 24 * 60 * 60 * 1000;
         const strTime = timeToString(time);
+        console.log(strTime)
 
         const newItems = {};
-        if (!newItems[strTime]) {
           newItems[strTime] = [];
           newItems[strTime].push({
             name: 'Item',
             day: strTime,
             target: () => <TodayReservation datetime={new Date(strTime)}></TodayReservation>
           });
-        }
       setItems(newItems);
     }
 
     const renderItem = (day, item) => {
         return (
           <>
+          {console.log('renderItems')}
             {item.target()}
           </>
         );
