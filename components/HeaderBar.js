@@ -13,6 +13,7 @@ const HeaderBar = ({title}) => {
   const closeNotificationContainer = useCallback(() => {
     setNotificationContainerVisible(false);
   }, []);
+
     return (
         <View style={styles.wrapper}>
             <View style={styles.innerWrapper}>

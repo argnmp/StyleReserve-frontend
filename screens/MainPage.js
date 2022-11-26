@@ -118,7 +118,7 @@ const MainPage = () => {
         </View>
         <Pressable
           style={styles.pressable}
-          onPress={() => navigation.navigate("TodayReservation")}
+          onPress={() => navigation.navigate("StylerReservation")}
         >
           <Image
             style={styles.wardrobeRenovationWinter1Icon}

@@ -1,13 +1,10 @@
 import * as React from "react";
 import { useState, useCallback, useEffect } from "react";
-import { StyleSheet, View, Text, Image, Pressable, Modal, AsyncStorage, ScrollView} from "react-native";
+import { StyleSheet, View, Text, Image, Pressable, Modal, AsyncStorage, ScrollView, Button} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 import PlusReservation from "../components/PlusReservation";
-import NewReservation from "../components/NewReservation";
-import Alarmcenterbanner from "../components/Alarmcenterbanner";
-import NavigationBar from "../components/NavigationBar";
-import Layout from "./layout";
+import AddReservation from "../components/AddReservation";
 
 // 오늘 날짜의 데이터 불러오기
 /**
@@ -18,12 +15,13 @@ var date = d.getDate();
 
 */
 
-const fetchApi = async (setReserveData) => {
+const fetchApi = async (setReserveData, openContainer1, setTargetCount, setTargetSr, date) => {
+  console.log(date.getFullYear(), date.getMonth(), date.getDate());
     let result = await axios.post('http://15.165.172.198/sr/getDateReserves', {
         access_token: await AsyncStorage.getItem('access_token'),
         year: 2022,
-        month: 11,
-        date: 12,
+        month: date.getMonth() + 1,
+        date: date.getDate(),
     });
     let dates=[];
     console.log(result.data);
@@ -35,7 +33,7 @@ const fetchApi = async (setReserveData) => {
             members.push(<Text key={key++}>{k.nickname}</Text>);
         }
 
-        let courses = ["미세먼지 제거", "눈/비 건조", "정장/코트", "스팀살균"];
+        let courses = ["미세먼지 제거", "눈/비 건조", "정장/코트", "스팀살균", "표준"];
 
         // 예약한 시간 별로 섹션 묶어서 보여줌
         dates.push(
@@ -44,17 +42,29 @@ const fetchApi = async (setReserveData) => {
                 <Text style = {styles.text_st}>{i.start_time.slice( 11, 16 )}</Text>
                 <Text style = {styles.text_et}>+{i.course.duration}분</Text>
             </View>
-            <View style = {styles.info_group}>
-                <View style = {styles.text_position}>
-                    <Image
-                        style={styles.cloth_image}
-                        resizeMode="cover"
-                        source={require("../assets/clothes-hanger-white.png")} />
-                    <Text style = {styles.info_text}>예약 코스: {courses[i.course.course_id-1]}</Text>
-                    <Text style = {styles.info_text}>최초 예약자: {i.owner.nickname}</Text>
-                    <Text style = {styles.info_text}>예약 현황: {i.total_count} / 5</Text>
-                    <Text style = {styles.info_text}>예약 명단: {members}</Text>
-                </View>                  
+            <View style = {[styles.info_group, i.total_count >= 5 && styles.inactive]}>
+              <Image
+                style={styles.cloth_image}
+                resizeMode="cover"
+                source={require("../assets/clothes-hanger-white.png")} />
+              <View style={styles.text_position}>
+                <Text style={styles.info_text}>예약 코스: {courses[i.course.course_id - 1]}</Text>
+                <Text style={styles.info_text}>최초 예약자: {i.owner.nickname}</Text>
+                <Text style={styles.info_text}>예약 현황: {i.total_count} / 5</Text>
+                <Text style={styles.info_text}>예약 명단: {members}</Text>
+              </View>                  
+              <Pressable
+                style={[styles.addButton, i.total_count >= 5 && styles.invisible]}
+                onPress={() => {
+                  setTargetCount(i.total_count);
+                  setTargetSr(i.sreserve_id);
+                  openContainer1();
+                }}
+              >
+                <Image style={styles.icon}
+                  resizeMode="cover"
+                  source={require("../assets/add.png")} />
+              </Pressable>
             </View>                     
         </View>
             );
@@ -63,13 +73,11 @@ const fetchApi = async (setReserveData) => {
    
     
   }
-const TodayReservation = () => {
+const TodayReservation = ({datetime}) => {
   const [container1Visible, setContainer1Visible] = useState(false);
-  const [ellipsisV1IconVisible, setEllipsisV1IconVisible] = useState(false);
-  const [ellipsisV1Icon1Visible, setEllipsisV1Icon1Visible] = useState(false);
-  const [ellipsisV1Icon2Visible, setEllipsisV1Icon2Visible] = useState(false);
-  const [notificationContainerVisible, setNotificationContainerVisible] =
-    useState(false);
+  const [addContainerVisible, setAddContainerVisible] = useState(false);
+  const [targetCount, setTargetCount] = useState(1);
+  const [targetSr, setTargetSr] = useState(1);
   const navigation = useNavigation();
 
   const openContainer1 = useCallback(() => {
@@ -80,117 +88,52 @@ const TodayReservation = () => {
     setContainer1Visible(false);
   }, []);
 
-  const openEllipsisV1Icon = useCallback(() => {
-    setEllipsisV1IconVisible(true);
+  const openAddContainer = useCallback(() => {
+    setAddContainerVisible(true);
   }, []);
 
-  const closeEllipsisV1Icon = useCallback(() => {
-    setEllipsisV1IconVisible(false);
+  const closeAddContainer = useCallback(() => {
+    setAddContainerVisible(false);
   }, []);
 
-  const openEllipsisV1Icon1 = useCallback(() => {
-    setEllipsisV1Icon1Visible(true);
-  }, []);
-
-  const closeEllipsisV1Icon1 = useCallback(() => {
-    setEllipsisV1Icon1Visible(false);
-  }, []);
-
-  const openEllipsisV1Icon2 = useCallback(() => {
-    setEllipsisV1Icon2Visible(true);
-  }, []);
-
-  const closeEllipsisV1Icon2 = useCallback(() => {
-    setEllipsisV1Icon2Visible(false);
-  }, []);
-
-  const openNotificationContainer = useCallback(() => {
-    setNotificationContainerVisible(true);
-  }, []);
-
-  const closeNotificationContainer = useCallback(() => {
-    setNotificationContainerVisible(false);
-  }, []);
 
   const [reserveData, setReserveData] = useState([]);
   useEffect(()=>{
     const func = async ()=>{
-        await fetchApi(setReserveData);
+        await fetchApi(setReserveData, openContainer1, setTargetCount, setTargetSr, datetime);
     }
     func();
   },[]);
+
+
   
   return (
-    <Layout title={'Styler Reservation'}>
-        <View style={styles.calendarView}>
-          <Text
-            style={styles.todaysReservationText}
-          >
-            {`Today’s Reservation  `}
-          </Text>
-          <Text style={styles.text0}>
-            오늘의 스타일러 예약 일정을 확인해보세요
-          </Text>
+    <>
 
-        </View>
-        <ScrollView style={styles.scheduleView}>
-          {reserveData}
-        </ScrollView>
-        <Pressable style={styles.pressable} onPress={openContainer1}>
+      <ScrollView style={styles.scheduleView}>
+        <Pressable style={styles.pressable} onPress={openAddContainer}>
           <View style={styles.rectangleView6} />
           <Text style={styles.text17}>새로운 예약하기</Text>
         </Pressable>
+        {reserveData}
+      </ScrollView>
 
 
+      <Modal animationType="fade" transparent visible={addContainerVisible}>
+        <View style={styles.container1Overlay}>
+          <Pressable style={styles.container1Bg} onPress={closeAddContainer} />
+          <AddReservation onClose={closeAddContainer} />
+        </View>
+      </Modal>
 
       <Modal animationType="fade" transparent visible={container1Visible}>
         <View style={styles.container1Overlay}>
           <Pressable style={styles.container1Bg} onPress={closeContainer1} />
-          <PlusReservation onClose={closeContainer1} />
+          <PlusReservation onClose={closeContainer1} targetCount={targetCount} targetSr={targetSr} />
         </View>
       </Modal>
 
-      <Modal animationType="fade" transparent visible={ellipsisV1IconVisible}>
-        <View style={styles.ellipsisV1IconOverlay}>
-          <Pressable
-            style={styles.ellipsisV1IconBg}
-            onPress={closeEllipsisV1Icon} />
-          <NewReservation onClose={closeEllipsisV1Icon} />
-        </View>
-      </Modal>
-
-      <Modal animationType="fade" transparent visible={ellipsisV1Icon1Visible}>
-        <View style={styles.ellipsisV1Icon1Overlay}>
-          <Pressable
-            style={styles.ellipsisV1Icon1Bg}
-            onPress={closeEllipsisV1Icon1} />
-          <NewReservation onClose={closeEllipsisV1Icon1} />
-        </View>
-      </Modal>
-
-      <Modal animationType="fade" transparent visible={ellipsisV1Icon2Visible}>
-        <View style={styles.ellipsisV1Icon2Overlay}>
-          <Pressable
-            style={styles.ellipsisV1Icon2Bg}
-            onPress={closeEllipsisV1Icon2} />
-          <NewReservation onClose={closeEllipsisV1Icon2} />
-        </View>
-      </Modal>
-
-      <Modal
-        animationType="fade"
-        transparent
-        visible={notificationContainerVisible}
-      >
-        <View style={styles.notificationContainerOverlay}>
-          <Pressable
-            style={styles.notificationContainerBg}
-            onPress={closeNotificationContainer} />
-          <Alarmcenterbanner onClose={closeNotificationContainer} />
-        </View>
-      </Modal>
-
-    </Layout>
+    </>
         
   );
 };
@@ -638,9 +581,6 @@ const styles = StyleSheet.create({
     height: 100,
   },
   rectangleView6: {
-    position: "absolute",
-    top: 0,
-    left: 0,
     borderRadius: 50,
     backgroundColor: "#a50034",
     shadowColor: "rgba(0, 0, 0, 0.25)",
@@ -655,9 +595,7 @@ const styles = StyleSheet.create({
     height: 42,
   },
   text17: {
-    position: "absolute",
-    top: 13,
-    left: 52,
+    position: "absolute",  
     fontSize: 16,
     letterSpacing: -0.8,
     color: "#fff",
@@ -669,11 +607,10 @@ const styles = StyleSheet.create({
     height: 17,
   },
   pressable: {
-    position: "absolute",
-    top: 720,
-    left: 90,
-    width: 233,
-    height: 42,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10
   },
   sText: {
     position: "absolute",
@@ -1232,7 +1169,7 @@ const styles = StyleSheet.create({
     height: 467,
   },
   scheduleView: {
-    paddingVertical: 10,
+    paddingBottom: 10,
     paddingHorizontal: 30,
     width: '100%',
   },
@@ -1379,7 +1316,30 @@ const styles = StyleSheet.create({
     position: 'flex',
     width: '100%',
     height: '100%',
-  }
+  },
+  icon: {
+    margin: 10,
+    width: 20,
+    height: 20,
+    overflow: "hidden",
+  },
+  addButton: {
+    position: 'absolute',
+    right: 0,
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inactive: {
+    backgroundColor: 'gray',
+  },
+  invisible: {
+    display: 'none',
+  },
+
+
+
 });
 
 export default TodayReservation;

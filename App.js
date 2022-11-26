@@ -34,13 +34,13 @@ const AppNavigator = () => {
       }}
     >
 
-      <Stack.Screen name="Loading" component={Login} options={{ headerShown: false }} />
+      <Stack.Screen name="Loading" component={StylerReservation} options={{ headerShown: false }} />
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
       <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{ headerShown: false }} />
       <Stack.Screen name="FindPassword" component={FindPassword} options={{ headerShown: false }} />
       <Stack.Screen name="FoundPassword" component={FoundPassword} options={{ headerShown: false }} />
       <Stack.Screen name="MainPage" component={MainPage} options={{ headerShown: false }} />
-      <Stack.Screen name="TodayReservation" component={TodayReservation} options={{ headerShown: false }} />
+      <Stack.Screen name="TodayReservation" component={TodayReservation} options={{ headerShown: false, unmountOnBlur: true }} />
       <Stack.Screen name="StylerReservation" component={StylerReservation} options={{ headerShown: false }} />
       <Stack.Screen name="AddClothesInfo" component={AddClothesInfo} options={{ headerShown: false }} />
       <Stack.Screen name="EditInfo" component={EditInfo} options={{ headerShown: false }} />

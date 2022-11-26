@@ -1,7 +1,8 @@
 import * as React from "react";
 import { useState, useCallback } from "react";
-import { View, StyleSheet, Text, Image, Pressable, Modal, AsyncStorage } from "react-native";
+import { View, StyleSheet, Text, Image, Pressable, Modal, AsyncStorage, Button, TouchableOpacity, TextInput} from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import axios from 'axios';
 import StartWith from "../components/StartWith";
@@ -9,6 +10,7 @@ import NumOfClothes from "../components/NumOfClothes";
 import ReserveDoneBanner from "../components/ReserveDoneBanner";
 import RNPickerSelect from 'react-native-picker-select';
 
+const courses = ["미세먼지 제거", "눈/비 건조", "정장/코트", "스팀살균", "표준"];
 const addSrmember = async (selectValue, targetSr) => {
   let result = await axios.post('http://15.165.172.198/sr/addMember', {
     access_token: await AsyncStorage.getItem('access_token'),
@@ -18,57 +20,86 @@ const addSrmember = async (selectValue, targetSr) => {
   console.log(result.data);
 
 }
-const PlusReservation = ({ onClose, targetCount, targetSr }) => {
-  const [containerVisible, setContainerVisible] = useState(false);
-  const [selectValue, setSelectValue] = useState(null);
-  const navigation = useNavigation(); 
-  const selectList = [];
-  for(let i = 1; i <= 5-targetCount; i++){
-    selectList.push({label: `${i}`, value: i}); 
-  }
-  const openContainer = useCallback(() => {
-    setContainerVisible(true);
-  }, []);
+const AddReservation = ({ onClose, targetCount, targetSr }) => {
+    const [containerVisible, setContainerVisible] = useState(false);
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [selectTime, setSelectTime] = useState(new Date());
+    const [selectCourse, setSelectCourse] = useState(null);
 
-  const closeContainer = useCallback(() => {
-    setContainerVisible(false);
-  }, []);
-  return (
-    <>
-      <View style={styles.plusReservationView}>
-        <View style={styles.selectWrapper}>
-          <View style={{width: 200, marginBottom: 20}}>
-            <RNPickerSelect
-              onValueChange={(value) => setSelectValue(value)}
-              style={{ ...pickerSelectStyles }}
-              placeholder={{
-                label: "옷의 개수를 선택해주세요",
-              }}
-              items={selectList}
-            />
-          </View>
-          <Pressable style={styles.pressable} onPress={()=>{
-            if(selectValue == null){
-              onClose();
-              return;
-            }
-            addSrmember(selectValue, targetSr); 
-            navigation.pop();
-            }}>
-            <View style={styles.rectangleView2} />
-            <Text style={styles.text1}>예약 추가하기</Text>
-          </Pressable>
-        </View>
-      </View>
+    const navigation = useNavigation();
+    const openContainer = useCallback(() => {
+        setContainerVisible(true);
+    }, []);
 
-      <Modal animationType="fade" transparent visible={containerVisible}>
-        <View style={styles.containerOverlay}>
-          <Pressable style={styles.containerBg} onPress={closeContainer} />
-          <ReserveDoneBanner onClose={closeContainer} />
-        </View>
-      </Modal>
-    </>
-  );
+    const closeContainer = useCallback(() => {
+        setContainerVisible(false);
+    }, []);
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
+
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
+
+    const handleConfirm = (date) => {
+        hideDatePicker();
+        setSelectTime(new Date(date))
+    };
+    return (
+        <>
+            <View style={styles.addReservationView}>
+                <View style={styles.container}>
+                    <TouchableOpacity onPress={showDatePicker}>
+                        <TextInput
+                            pointerEvents="none"
+                            style={styles.textInput}
+                            placeholder={selectTime.toTimeString()}
+                            placeholderTextColor="#000000"
+                            value={selectTime}
+                        />
+                        <DateTimePickerModal
+                            isVisible={isDatePickerVisible}
+                            mode="time"
+                            onConfirm={handleConfirm}
+                            onCancel={hideDatePicker}
+                        />
+                    </TouchableOpacity>	
+                    <View style={{ width: 200, marginBottom: 20 }}>
+                        <RNPickerSelect
+                            onValueChange={(value) => setSelectCourse(value)}
+                            style={{ ...pickerSelectStyles }}
+                            placeholder={{
+                                label: "코스를 선택해주세요",
+                            }}
+                            items={[
+                                {label: courses[1], value: 1},
+                                {label: courses[2], value: 2},
+                                {label: courses[3], value: 2},
+                                {label: courses[4], value: 2},
+                                {label: courses[5], value: 2},
+                            ]}
+                        />
+                    </View>
+                    <Pressable style={styles.pressable} onPress={() => {
+                        addSreserve(selectValue, targetSr);
+                        navigation.pop();
+                    }}>
+                        <View style={styles.rectangleView2} />
+                        <Text style={styles.text1}>예약 확정하기</Text>
+                    </Pressable>
+
+                </View>
+            </View>
+
+            <Modal animationType="fade" transparent visible={containerVisible}>
+                <View style={styles.containerOverlay}>
+                    <Pressable style={styles.containerBg} onPress={closeContainer} />
+                    <ReserveDoneBanner onClose={closeContainer} />
+                </View>
+            </Modal>
+        </>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -237,6 +268,7 @@ const styles = StyleSheet.create({
   pressable: {
     width: 233,
     height: 42,
+    marginTop: 20,
   },
   rectangleView3: {
     position: "absolute",
@@ -302,7 +334,7 @@ const styles = StyleSheet.create({
     width: 307,
     height: 46,
   },
-  plusReservationView: {
+  addReservationView: {
     position: "relative",
     borderRadius: 10,
     backgroundColor: "#fff",
@@ -321,9 +353,23 @@ const styles = StyleSheet.create({
   },
   picker: {
     fontSize: 30,
-  }
-});
-
+    },
+    textInput: {
+        fontSize: 16,
+        height: 50,
+        borderWidth: 2,
+        borderRadius: 12,
+        padding: 10,
+        borderColor: '#a50034',
+    },
+    container: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
+}
+);
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     fontSize: 16,
@@ -347,4 +393,5 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
-export default PlusReservation;
+
+export default AddReservation;

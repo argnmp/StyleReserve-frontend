@@ -15,7 +15,7 @@ const Signupbanner1 = ({ onClose }) => {
       <Text style={[styles.text]}>예약이 완료되었습니다.</Text>
       <Pressable
         style={[styles.groupPressable]}
-        onPress={() => navigation.navigate("OverallStylerReservation")}
+        onPress={() => navigation.navigate("MainPage")}
       >
         <View style={styles.rectangleView} />
         <Text style={styles.text1}>돌아가기</Text>
