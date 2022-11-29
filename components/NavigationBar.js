@@ -20,7 +20,7 @@ export default function navigationBar({select}) {
         </Pressable>
         <Pressable
           style={[styles.iconPressable, select == 2 && styles.iconBack]}
-          onPress={() => navigation.navigate("OverallStylerReservation")}
+          onPress={() => navigation.navigate("StylerReservation")}
         >
           <Image
             style={styles.icon}

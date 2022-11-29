@@ -17,6 +17,7 @@ const loginApi = async (navigation, email, password) => {
     return;
   }
   await AsyncStorage.setItem('access_token', result.data.data.access_token);
+  await AsyncStorage.setItem('nickname', result.data.data.nickname);
   navigation.navigate("MainPage");
 }
 
@@ -26,7 +27,14 @@ const SignInScreen = () => {
   const [password, setPassword] = useState();
   
   return (
-    <>
+    <View style={styles.wrapper}>
+      <View style={styles.logoWrapper}>
+        <Image
+          style={styles.serviceLogoIcon}
+          resizeMode="cover"
+          source={require("../assets/logo-grad.png")}
+        />
+      </View>
       <View style={styles.enterLoginView}>
         <View style={styles.enterEmailView}>
           <View style={styles.emailboxView} />
@@ -39,45 +47,47 @@ const SignInScreen = () => {
         <View style={styles.enterPasswordView}>
           <View style={styles.passwordBoxView} />
           <TextInput
-          style={styles.inputtext2}
+          secureTextEntry={true}
+          style={styles.inputtext1}
           placeholder="비밀번호를 입력하세요"
           onChangeText={newText => setPassword(newText)}
           />
         </View>
+      </View>
+      <View style={styles.itemWrapper}>
+        <Pressable
+          onPress={() => navigation.navigate("FindPassword")}
+        >
+          <Text>비밀번호 찾기</Text>
+        </Pressable>
+      </View>
+      <View style={styles.itemWrapper}>
+        <Pressable
+          style={styles.loginButtonPressable}
+          onPress={async () => { await loginApi(navigation, email, password) }}
+        >
+          <View style={styles.rectangleView}>
+          <Text style={styles.text4}>로그인</Text>
+          </View>
+        </Pressable>
+      </View>
+
+
+      <View style={styles.splitView}>
+        <Text style={styles.orText}>{`-------------------- Or --------------------`}</Text>
       </View>
 
       <View style={styles.signUpButtonView}>
         <Pressable
           onPress={() => navigation.navigate("SignUpScreen")}
         >
-          <SignUpPage />
+          <Text style={styles.text}>이메일로 회원가입하기</Text>
         </Pressable>
+
       </View>
 
-      <View style={styles.findPasswordButtonView}>
-        <Pressable
-          onPress={() => navigation.navigate("FindPassword")}
-        >
-          <FindMyPW />
-        </Pressable>
-      </View>
-      <Pressable
-        style={styles.loginButtonPressable}
-        onPress={async () => {await loginApi(navigation, email, password)}}
-      >
-        <View style={styles.rectangleView} />
-        <Text style={styles.text4}>로그인</Text>
-      </Pressable>
 
-      <Image
-        style={styles.serviceLogoIcon}
-        resizeMode="cover"
-        source={require("../assets/logo-grad.png")}
-      />
-      <View style={styles.splitView}>
-        <Text style={styles.orText}>{`-------------------- Or --------------------`}</Text>
-      </View>
-    </>
+    </View>
   );
 };
 
@@ -95,12 +105,9 @@ const styles = StyleSheet.create({
     height: 45.2,
   },
   inputtext1: {
-    position: "absolute",
     top: 16.01,
     left: 10.16,
-    fontSize: 14,
-    letterSpacing: -1.4,
-    color: "#b5b5b5",
+    fontSize: 16,
     textAlign: "left",
     display: "flex",
     alignItems: "center",
@@ -108,9 +115,7 @@ const styles = StyleSheet.create({
     height: 14.13,
   },
   enterEmailView: {
-    position: "absolute",
-    top: 0,
-    left: 0,
+    marginTop: 5,
     width: 328,
     height: 45.2,
   },
@@ -140,18 +145,13 @@ const styles = StyleSheet.create({
     height: 14.13,
   },
   enterPasswordView: {
-    position: "absolute",
-    top: 51.79,
-    left: 0,
+    marginTop: 5,
     width: 328,
     height: 45.2,
   },
   enterLoginView: {
-    position: "absolute",
-    top: 380,
-    left: 41,
-    width: 328,
-    height: 97,
+    width: '100%',
+    alignItems: 'center',  
   },
   text2: {
     letterSpacing: "-5%",
@@ -180,69 +180,51 @@ const styles = StyleSheet.create({
     top: 0,
   },
   signUpButtonView: {
-    position: "absolute",
-    top: 635,
-    left: 88,
-    width: 238,
+    marginTop: 50,
+    width: '100%',
     height: 15,
   },
-  findPasswordButtonView: {
-    position: "absolute",
-    top: 447,
-    left: 288,
-    width: 71,
-    height: 15,
+  itemWrapper: {
+    width: '100%',
+    color: "#6a6a6a",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
   },
   rectangleView: {
-    position: "absolute",
-    top: 40,
-    left: 7,
     borderRadius: 50,
     backgroundColor: "#a50034",
     width: 128,
     height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text4: {
     position: "absolute",
-    top: 53,
-    left: 38,
     fontSize: 16,
     color: "#fff",
     textAlign: "center",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    width: 67,
-    height: 14,
   },
   loginButtonPressable: {
-    position: "absolute",
-    top: 498,
-    left: 131,
     width: 128,
     height: 40,
   },
   serviceLogoIcon: {
-    position: "absolute",
-    top: 190,
-    left: 132,
     width: 139,
     height: 168,
   },
   orText: {
-    position: "absolute",
-    top: 68,
-    left: 44,
     fontSize: 12,
     color: "#757171",
     textAlign: "center",
   },
   splitView: {
-    position: "absolute",
-    top: 583,
-    left: 46,
-    width: 298,
+    width: "100%",
     height: 14,
+    marginTop: 50,
   },
   signInScreenPressable: {
     position: "relative",
@@ -255,6 +237,27 @@ const styles = StyleSheet.create({
     height: 844,
     overflow: "hidden",
   },
+  wrapper: {
+    width: '100%',
+    height: '100%',
+    flex: 1,
+    flexDirection: 'column',
+  },
+  logoWrapper: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 200,
+  },
+  text: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#a50034",
+    textAlign: "center",
+    opacity: 0.5,
+
+  }
+
 });
 
 export default SignInScreen;

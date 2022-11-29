@@ -349,15 +349,16 @@ const styles = StyleSheet.create({
     height: "2.84%",
   },
   signUpScreenView: {
-    position: "relative",
-    backgroundColor: "#fff",
-    borderStyle: "solid",
-    borderColor: "#000",
-    borderWidth: 1,
+    width: '100%',
+    height: '100%',
     flex: 1,
     width: "100%",
     height: 844,
   },
+  itemView: {
+    width: '100%',
+    
+  }
 });
 
 export default SignUpScreen;

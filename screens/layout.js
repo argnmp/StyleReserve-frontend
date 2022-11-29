@@ -7,12 +7,14 @@ import axios from 'axios';
 import HeaderBar from '../components/HeaderBar';
 import NavigationBar from '../components/NavigationBar';
 
-const Layout = ({children, title}) => {
+const Layout = ({children, title, isHeader = true}) => {
     return (
         <View style={styles.wrapper}>
-            <View style={styles.header}>
-                <HeaderBar title={title}/> 
-            </View>
+            {isHeader && 
+                <View style={styles.header}>
+                    <HeaderBar title={title} />
+                </View>
+            }
             <View style={styles.content}>
                 {children}
             </View>

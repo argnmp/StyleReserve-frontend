@@ -1,12 +1,42 @@
 import * as React from "react";
-import { useState, useCallback } from "react";
-import { Image, StyleSheet, View, Text, Pressable, Modal } from "react-native";
+import { useState, useCallback, useEffect } from "react";
+import { Image, StyleSheet, View, Text, Pressable, Modal, AsyncStorage } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 import Alarmcenterbanner from "../components/Alarmcenterbanner";
+import Layout from "./layout";
 
+const courses = ["미세먼지 제거", "눈/비 건조", "정장/코트", "스팀살균", "표준"];
 const MainPage = () => {
   const navigation = useNavigation();
+  const [nickname, setNickname] = useState("");
+  const [recentItem, setRecentItem] = useState({});
   const [container9Visible, setContainer9Visible] = useState(false);
+  
+  useEffect(()=>{
+    const fetchNickname = async ()=>{
+      let res = await AsyncStorage.getItem('nickname');
+      setNickname(res);
+    } 
+    fetchNickname();
+  },[]);
+  
+  useEffect(()=>{
+    const fetchRecentReserve = async () => {
+      let result = await axios.post('http://15.165.172.198/sr/getRecentReserve', {
+        access_token: await AsyncStorage.getItem('access_token'),
+      });
+      
+
+      if (result.data.code == Number(4030)) {
+        setRecentItem({exist: false});
+        return;
+      }
+      setRecentItem({exist: true, data: result.data.data, start_time: new Date(result.data.data)});
+    }
+    fetchRecentReserve();
+    
+  })
 
   const openContainer9 = useCallback(() => {
     setContainer9Visible(true);
@@ -17,134 +47,124 @@ const MainPage = () => {
   }, []);
   return (
     <>
+    <Layout isHeader={false}>
       <View style={styles.mainPageView}>
-        <View style={styles.view2}>
-          <View style={styles.navigationBarView} />
-          <View style={styles.frameView}>
-            <Image
-              style={styles.homeIcon}
-              resizeMode="cover"
-              source={require("../assets/home.png")}
-            />
+        <View style={styles.mainHeader}>
+            <View style={styles.greeting}>
+              <Text style={styles.text2}>안녕하세요,</Text>
+              <Text style={[styles.nicknameText]}>{nickname}
+                <Text style={styles.commonText}> 님</Text> 
+              </Text>
+            </View>
+            <View style={styles.subHeader}>
+              <View style={styles.sch}>
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                  <Image
+                    style={styles.icon}
+                    resizeMode="cover"
+                    source={require("../assets/reserve.png")}
+                  />
+                  <Text> </Text>
+                  <Text style={styles.boxText}>
+                    스타일러 예약
+                  </Text>
+                </View>
+                <View style={styles.innerSch}>
+                  <View style={styles.groupView}>
+                    {recentItem.exist ? 
+                    <>
+                    <Text style={styles.text5}>{courses[recentItem.data.course.course_id-1]}</Text>
+                    <View style={styles.clistView}>
+                      <Text style={styles.may2021Text3}>Date</Text>
+                      <Text style={[styles.text10, styles.ml24]}>{new Date(recentItem.data.start_time).getMonth()+1}월 {new Date(recentItem.data.start_time).getDate()}일</Text>
+                    </View>
+                    <View style={styles.clistView1}>
+                      <Text style={styles.may2021Text4}>Time</Text>
+                      <Text style={[styles.text11, styles.ml24]}>{new Date(recentItem.data.start_time).getHours()}:{new Date(recentItem.data.start_time).getMinutes()}</Text>
+                    </View>
+                    <View style={styles.clistView2}>
+                      <Text style={styles.may2021Text5}>Estimate</Text>
+                      <Text style={[styles.text12, styles.ml24]}>{recentItem.data.course.duration}분</Text>
+                    </View>
+                    </>
+                    :
+                    <Text style={styles.text20}>다음 예약이 없습니다</Text>
+                    }
+                  </View>
+
+                </View>
+
+              </View>
+              <View style={styles.sch}>
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                  <Image
+                    style={styles.icon}
+                    resizeMode="cover"
+                    source={require("../assets/tshirt.png")}
+                  />
+                  <Text> </Text>
+                  <Text style={styles.boxText}>
+                    스타일링 예약
+                  </Text>
+                </View>
+                <View style={styles.innerSch}>
+                  <View style={styles.groupView}>
+                    <Text style={styles.text5}>청바지</Text>
+                    <View style={styles.clistView}>
+                      <Text style={styles.may2021Text}>Date</Text>
+                      <Text style={[styles.text6, styles.ml24]}>11월 7일</Text>
+                    </View>
+                    <View style={styles.clistView1}>
+                      <Text style={styles.may2021Text1}>Purpose</Text>
+                      <Text style={[styles.text7, styles.ml24]}>Meeting</Text>
+                    </View>
+                    <View style={styles.clistView2}>
+                      <Text style={styles.may2021Text2}>Alarm</Text>
+                      <Text style={[styles.text8, styles.ml24]}>ON</Text>
+                    </View>
+                  </View>
+
+                </View>
+
+              </View>
+            </View>
+        </View>
+        
+        <View style={styles.content}>
             <Pressable
-              style={[styles.calendarPressable, styles.ml74]}
-              onPress={() => navigation.navigate("TodayReservation")}
+              style={styles.pressable}
+              onPress={() => navigation.navigate("StylerReservation")}
             >
               <Image
-                style={styles.icon}
+                style={styles.wardrobeRenovationWinter1Icon}
                 resizeMode="cover"
-                source={require("../assets/timetable.png")}
+                source={require("../assets/wardrobe.jpg")}
               />
+              <Text style={styles.contentTitleText}>Styler Reservation</Text>
+              <Text style={styles.contentText}>
+                원하는 시간에 스타일러 사용을 예약하여{"\n"}깔끔하고 정돈된 옷을 입어보세요
+              </Text>
             </Pressable>
+
             <Pressable
-              style={[styles.clothPressable, styles.ml74]}
+              style={styles.pressable}
               onPress={() => navigation.navigate("MyCloset")}
             >
               <Image
-                style={styles.icon1}
+                style={styles.icon3}
                 resizeMode="cover"
-                source={require("../assets/closet.png")}
+                source={require("../assets/Styler_img.png")}
               />
+              <Text style={styles.contentTitleText}>Styling Reservation</Text>
+              <Text style={styles.contentText}>
+                중요한 약속에 입을 옷을 미리 예약하고{"\n"}스타일러를 전날 사용해보세요
+              </Text>
             </Pressable>
-            <Pressable
-              style={[styles.userPressable, styles.ml74]}
-              onPress={() => navigation.navigate("MyPage")}
-            >
-              <Image
-                style={styles.icon2}
-                resizeMode="cover"
-                source={require("../assets/user.png")}
-              />
-            </Pressable>
-            <View style={styles.rectangleView} />
-          </View>
+
         </View>
-        <View style={styles.view3}>
-          <View style={styles.rectangleView1} />
-          <View style={styles.rectangleView2} />
-          <View style={styles.rectangleView3} />
-        </View>
-        <View style={styles.view4}>
-          <Text style={styles.text2}>안녕하세요,</Text>
-          <Text style={[styles.oOOText1, styles.mt4]}>OOO님!</Text>
-        </View>
-        <Image
-          style={styles.brokenEssentionalUITS}
-          resizeMode="cover"
-          source={require("../assets/tshirt.png")}
-        />
-        <Text style={styles.text3}>스타일러 예약</Text>
-        <Text style={styles.text4}>스타일링 예약</Text>
-        <Image
-          style={styles.bulletListIcon}
-          resizeMode="cover"
-          source={require("../assets/reserve.png")}
-        />
-        <View style={styles.view5}>
-          <View style={styles.rectangleView4} />
-          <View style={styles.groupView}>
-            <Text style={styles.text5}>청바지</Text>
-            <View style={styles.clistView}>
-              <Text style={styles.may2021Text}>Date</Text>
-              <Text style={[styles.text6, styles.ml24]}>11월 7일</Text>
-            </View>
-            <View style={styles.clistView1}>
-              <Text style={styles.may2021Text1}>Purpose</Text>
-              <Text style={[styles.text7, styles.ml24]}>Meeting</Text>
-            </View>
-            <View style={styles.clistView2}>
-              <Text style={styles.may2021Text2}>Alarm</Text>
-              <Text style={[styles.text8, styles.ml24]}>ON</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.view6}>
-          <View style={styles.groupView1}>
-            <View style={styles.rectangleView5} />
-            <Text style={styles.text9}>살균 코스</Text>
-            <View style={styles.clistView3}>
-              <Text style={styles.may2021Text3}>Date</Text>
-              <Text style={[styles.text10, styles.ml24]}>11월 7일</Text>
-            </View>
-            <View style={styles.clistView4}>
-              <Text style={styles.may2021Text4}>Time</Text>
-              <Text style={[styles.text11, styles.ml24]}>15:00</Text>
-            </View>
-            <View style={styles.clistView5}>
-              <Text style={styles.may2021Text5}>Estimate</Text>
-              <Text style={[styles.text12, styles.ml24]}>00:30</Text>
-            </View>
-          </View>
-        </View>
-        <Pressable
-          style={styles.pressable}
-          onPress={() => navigation.navigate("StylerReservation")}
-        >
-          <Image
-            style={styles.wardrobeRenovationWinter1Icon}
-            resizeMode="cover"
-            source={require("../assets/wardrobe.jpg")}
-          />
-          <Text style={styles.stylerReservationText}>Styler Reservation</Text>
-          <Text style={styles.text15}>
-          원하는 시간에 스타일러 사용을 예약하여{"\n"}깔끔하고 정돈된 옷을 입어보세요
-          </Text>
-        </Pressable>
-        <Pressable
-          style={styles.pressable1}
-          onPress={() => navigation.navigate("MyCloset")}
-        >
-          <Image
-            style={styles.icon3}
-            resizeMode="cover"
-            source={require("../assets/Styler_img.png")}
-          />
-          <Text style={styles.stylingReservationText}>Styling Reservation</Text>
-          <Text style={styles.text18}>
-          중요한 약속에 입을 옷을 미리 예약하고{"\n"}스타일러를 전날 사용해보세요
-          </Text>
-        </Pressable>
       </View>
+
+    </Layout>
 
       <Modal animationType="fade" transparent visible={container9Visible}>
         <View style={styles.container9Overlay}>
@@ -320,13 +340,6 @@ const styles = StyleSheet.create({
     ],
     opacity: 0.8,
   },
-  view3: {
-    position: "absolute",
-    top: -105,
-    left: -13.42,
-    width: 477.67,
-    height: 452,
-  },
   text2: {
     position: "relative",
     fontSize: 22,
@@ -496,10 +509,7 @@ const styles = StyleSheet.create({
   },
   groupView: {
     position: "absolute",
-    top: 19,
-    left: 13,
-    width: 129,
-    height: 80.39,
+    width: '100%',
   },
   view5: {
     position: "absolute",
@@ -652,9 +662,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   pressable: {
-    position: "absolute",
-    top: 370,
-    left: 31,
     borderRadius: 24,
     backgroundColor: "#fff",
     shadowColor: "rgba(0, 0, 0, 0.25)",
@@ -670,6 +677,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: 355,
     height: 180,
+    marginTop: 20,
   },
   icon3: {
     position: "absolute",
@@ -721,16 +729,93 @@ const styles = StyleSheet.create({
     height: 180,
   },
   mainPageView: {
-    position: "relative",
-    backgroundColor: "#fff",
-    borderStyle: "solid",
-    borderColor: "#000",
-    borderWidth: 1,
+    width: '100%',
+    height: '100%',
     flex: 1,
-    width: "100%",
-    height: 844,
     overflow: "hidden",
   },
+  mainHeader: {
+    width: '100%',
+    height: 295,
+    backgroundColor: "#a50034",
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+  },
+  greeting: {
+    width: '100%',
+  },
+  nicknameText: {
+    fontSize: 50,
+    lineHeight: 60,
+    fontWeight: "700",
+    color: "#fff",
+    paddingBottom: 10,
+  },
+  commonText: {
+    fontSize: 25,
+  },
+  subHeader: {
+    flex: 1,
+    flexDirection: 'row',
+    width: '100%',
+  },
+  sch: {
+    flex: '1 1 0',
+    paddingHorizontal: 5,
+    
+  },
+  icon: {
+    width: 20,
+    height: 20,
+  },
+  boxText: {
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: '700',
+  },
+  innerSch: {
+    width: '100%',
+    height: 110,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+  },
+  content: {
+    alignItems: 'center',
+  },
+  contentText: {
+    position: "absolute",
+    bottom: 40,
+    left: 20,
+    fontSize: 15,
+    color: "#1e1d1d",
+    textAlign: "left",
+  },
+  contentTitleText: {
+    position: "absolute",
+    top: 21,
+    left: 20,
+    fontSize: 35,
+    letterSpacing: -0.5,
+    fontWeight: "700",
+    color: "#a50034",
+    textAlign: "left",
+
+  }, 
+  text20: {
+    position: "absolute",
+    top: 15,
+    left: 15,
+    fontSize: 15,
+    letterSpacing: -1,
+    fontWeight: "700",
+    color: "#a50034",
+    textAlign: "left",
+    display: "flex",
+    alignItems: "center",
+    width: 118.93,
+    height: 30,
+  },
+
 });
 
 export default MainPage;

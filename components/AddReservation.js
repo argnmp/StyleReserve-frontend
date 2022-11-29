@@ -55,8 +55,14 @@ const AddReservation = ({ onClose, datetime}) => {
         const dat = new Date(date);
         dat.setFullYear(datetime.getFullYear());
         dat.setMonth(datetime.getMonth());
-        dat.setDate(datetime.getDate());
-        console.log(dat);
+        if(dat.getUTCHours >= 15){
+          dat.setDate(datetime.getDate()-1);
+        }
+        else{
+          dat.setDate(datetime.getDate());
+        }
+        console.log('datetime', datetime);
+        console.log('dat', dat);
         setSelectTime(dat)
     };
     return (
