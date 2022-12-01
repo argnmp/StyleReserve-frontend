@@ -21,6 +21,7 @@ const MainPage = () => {
     fetchNickname();
   },[]);
   
+
   useEffect(()=>{
     const fetchRecentReserve = async () => {
       let result = await axios.post('http://15.165.172.198/sr/getRecentReserve', {
@@ -30,6 +31,11 @@ const MainPage = () => {
 
       if (result.data.code == Number(4030)) {
         setRecentItem({exist: false});
+        return;
+      }
+      
+      if (result.data.code == Number(3010)) {
+        navigation.navigate("Login");
         return;
       }
       setRecentItem({exist: true, data: result.data.data, start_time: new Date(result.data.data)});
@@ -148,7 +154,7 @@ const MainPage = () => {
 
             <Pressable
               style={styles.pressable}
-              onPress={() => navigation.navigate("MyCloset")}
+              onPress={() => navigation.navigate("StylingMain")}
             >
               <Image
                 style={styles.icon3}
@@ -425,7 +431,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 15,
     left: 15,
-    fontSize: 25,
+    fontSize: 20,
     letterSpacing: -1,
     fontWeight: "700",
     color: "#a50034",

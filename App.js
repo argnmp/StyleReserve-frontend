@@ -14,10 +14,12 @@ import EditInfo from "./screens/EditInfo";
 import MyCloset from "./screens/MyCloset";
 import MyPage from "./screens/MyPage";
 import TodayReservation from "./screens/TodayReservation";
-import personalStylingCalender from "./screens/personalstylingCalendar";
 import reserveclothes from "./screens/reserveclothes";
+import StylingReservation from "./screens/StylingReservation";
+import StylingMain from "./screens/StylingMain";
 
 import Layout from "./screens/layout";
+import PersonalStylingCalender from "./screens/personalstylingCalendar";
 
 
 const Stack = createStackNavigator();
@@ -46,7 +48,8 @@ const AppNavigator = () => {
       <Stack.Screen name="EditInfo" component={EditInfo} options={{ headerShown: false }} />
       <Stack.Screen name="MyCloset" component={MyCloset} options={{ headerShown: false }} />
       <Stack.Screen name="MyPage" component={MyPage} options={{ headerShown: false }} />
-      <Stack.Screen name="personalstylingCalendar" component={personalStylingCalender} options={{ headerShown: false }} />
+      <Stack.Screen name="StylingMain" component={StylingMain} options={{ headerShown: false }} />
+      <Stack.Screen name="StylingReservation" component={StylingReservation} options={{ headerShown: false }} />
       <Stack.Screen name="reserveclothes" component={reserveclothes} options={{ headerShown: false }} />
       <Stack.Screen name="Layout" component={Layout} options={{ headerShown: false }} />
     </Stack.Navigator>

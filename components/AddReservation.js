@@ -104,8 +104,8 @@ const AddReservation = ({ onClose, datetime}) => {
                             items={selectCountList}
                         />
                     </View>
-                    <Pressable style={styles.pressable} onPress={() => {
-                        addSreserve(selectTime, selectCourse, selectCount);
+                    <Pressable style={styles.pressable} onPress={async () => {
+                        await addSreserve(selectTime, selectCourse, selectCount);
                         navigation.pop();
                     }}>
                         <View style={styles.rectangleView2} />

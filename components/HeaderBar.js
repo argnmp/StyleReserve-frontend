@@ -21,7 +21,7 @@ const HeaderBar = ({title}) => {
                     {
                     <Pressable
                         style={styles.pressable}
-                        onPress={() => navigation.navigate("MainPage")}
+                        onPress={() => navigation.pop()}
                     >
                         <View style={styles.rectangle}>
                             <Image style={styles.icon}

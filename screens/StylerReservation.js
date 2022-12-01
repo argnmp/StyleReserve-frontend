@@ -13,24 +13,25 @@ const timeToString = (time) => {
     return date.toISOString().split('T')[0];
 }
 
-const App = () => {
+const StylerReservation = () => {
     const [items, setItems] = React.useState({});
 
     const loadItems = (day) => {
 
       console.log('loadItems', day);
       let i = 0;
-        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-        const strTime = timeToString(time);
-        console.log('strTime',strTime)
+      const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+      const strTime = timeToString(time);
+      console.log('strTime', strTime)
 
-        const newItems = {};
-          newItems[strTime] = [];
-          newItems[strTime].push({
-            name: 'Item',
-            day: strTime,
-            target: () => <TodayReservation datetime={new Date(strTime)}></TodayReservation>
-          });
+      const newItems = {};
+      newItems[strTime] = [];
+      newItems[strTime].push({
+        name: 'Item',
+        day: strTime,
+        target: () => <TodayReservation datetime={new Date(strTime)}>{console.log('rendered')}</TodayReservation>
+      });
+
       setItems(newItems);
     }
 
@@ -89,4 +90,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default App;
+export default StylerReservation;
