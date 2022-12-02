@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { AsyncStorage } from 'react-native';
 
@@ -8,58 +8,31 @@ import Layout from './layout';
 import { Modal, TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
-const addCreserve = async (navigation, selectedDate, description, cloth_id, setModalText, setModalVisible) => {
-    if(selectedDate==undefined){
-        setModalText("달력에서 날짜를 선택해주세요");
-        setModalVisible({state: true, reload: false});
-        return;
-    }
-    if(description==undefined){
-        setModalText("일정에 대한 설명을 입력해주세요");
-        setModalVisible({state: true, reload: false});
-        return;
-    }
-    console.log(selectedDate.getDate());
-    let result = await axios.post('http://15.165.172.198/cr/addCReserve', {
+const fetchMonthData = async (setReceivedData, setUserReservedDate, year, month) => {
+    let result = await axios.post('http://15.165.172.198/cr/checkUserReserve', {
         access_token: await AsyncStorage.getItem('access_token'),
-        cloth_id,
-        year: selectedDate.getFullYear(),
-        month: selectedDate.getMonth() + 1,
-        date: selectedDate.getDate(),
-        description,
-    });
-    console.log(result.data);
-    if(result.data.isSuccess == false){
-        setModalText("일정 등록에 실패하였습니다");
-        setModalVisible({state: true, reload: false});
-        return;
-    }
-    else {
-        setModalText("일정 등록에 성공하였습니다.");
-        setModalVisible({state: true, reload: true});
-        return;
-
-    }
-}
-const fetchMonthData = async (setReservedDate, year, month) => {
-    let result = await axios.post('http://15.165.172.198/cr/checkReserve', {
-        access_token: await AsyncStorage.getItem('access_token'),
-        cloth_id: 12,
         year,
         month,
     });
+    console.log(result.data.data);
+    const receivedData = {};
     const dates = {};
     for (let i of result.data.data) {
         let date = new Date(i.reservation_date);
-        dates[`${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`] = { selected: true, selectedColor: 'gray' };
+        dates[`${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`] = { marked: true, selectedColor: '#3388ff' };
+        receivedData[`${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`] = { description: i.description, cloth_id: i.clothes_id, url: i.Clothe.url, name: i.Clothe.name, brand_name: i.Clothe.brand_name}
     }
-    setReservedDate(dates);
+    console.log(receivedData)
+
+    setUserReservedDate(dates);
+    setReceivedData(receivedData);
 }
 const StylingMain = () => {
+    const [receivedData, setReceivedData] = useState(undefined);
     const [selectedDate, setSelectedDate] = useState(undefined);
-    const [reservedDate, setReservedDate] = useState({});
+    const [userReservedDate, setUserReservedDate] = useState({});
     const [nickname, setNickname] = useState(""); 
-    const [modalVisible, setModalVisible] = useState({state: false, reload: false});
+    const [modalVisible, setModalVisible] = useState(false);
     const [modalText, setModalText] = useState("");
 
     const navigation = useNavigation();
@@ -69,7 +42,7 @@ const StylingMain = () => {
             let nickname = await AsyncStorage.getItem('nickname')
             setNickname(nickname); 
         })();
-        fetchMonthData(setReservedDate, new Date().getFullYear(), new Date().getMonth()+1);
+        fetchMonthData(setReceivedData, setUserReservedDate, new Date().getFullYear(), new Date().getMonth()+1);
     }, []);
   
 
@@ -92,13 +65,17 @@ const StylingMain = () => {
                             dayTextAtIndex6: {
                                 color: 'blue'
                             }
-                        }
+                        },
+                        arrowColor: "#a50034",
                     }}
-                    onMonthChange={(day)=>{fetchMonthData(setReservedDate, day.year, day.month)}}
-                    markedDates={reservedDate}
+                    onMonthChange={(day)=>{fetchMonthData(setReceivedData, setUserReservedDate, day.year, day.month)}}
+                    markedDates={userReservedDate}
                     onDayPress={(day)=>{
-                        if(!Object.keys(reservedDate).includes(day.dateString)){
-                            setSelectedDate(new Date(day.dateString))
+                        console.log('pressed',day);
+                        console.log(userReservedDate);
+                        if(Object.keys(userReservedDate).includes(day.dateString)){
+                            setSelectedDate(day.dateString)
+                            setModalVisible(true);
                         }
                     }}
                     disabledDaysIndexes
@@ -110,13 +87,24 @@ const StylingMain = () => {
                 </View>
             </View>
 
-            <Modal presentationStyle={"formSheet"} visible={modalVisible.state} onDismiss={()=>setModalVisible({state: false, reload: false})}>
+            <Modal presentationStyle={"fullScreen"} visible={modalVisible} onDismiss={()=>setModalVisible(false)}>
+                {receivedData && selectedDate &&
                 <View style={styles.modalContainer}>
-                    <Text style={styles.modalText}>{modalText}</Text>
-                    <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={()=>{setModalVisible({state: false, reload: false}); if(modalVisible.reload) navigation.replace("StylingReservation")}}>
+                    <Text style={styles.modalTitleText}>{selectedDate}</Text>
+                    <Text style={styles.modalText}>{receivedData[selectedDate].name}</Text>
+                    <Text style={styles.modalText}>{receivedData[selectedDate].brand_name}</Text>
+                    <Image
+                      resizeMode="center"
+                      style={styles.itemImage}
+                      source={{ uri: receivedData[selectedDate].url }}
+                    />
+                    <Text style={styles.commonText}>{receivedData[selectedDate].description}</Text>
+                    <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={()=>{setModalVisible(false); }}>
                         <Text style={styles.text}>확인</Text>
                     </TouchableOpacity>
                 </View>
+                
+                }
             </Modal>
         </Layout>
     );
@@ -134,6 +122,11 @@ const styles = StyleSheet.create({
         marginTop: 10,
         paddingHorizontal: 30,
     },
+    itemImage: {
+        width: "100%",
+        height: 200,
+        marginVertical: 20,
+    },
     mainText: {
         color: "#a50034",
         fontWeight: "700",
@@ -149,6 +142,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 20,
     },
     text: {
         color: "#fff",
@@ -160,11 +154,25 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
+        padding: 20,
     },
-    modalText: {
+    modalTitleText: {
+        width: '100%',
         color: "#a50034",
         fontSize: 20,
-        marginVertical: 30,
+        fontWeight: "700",
+    },
+    modalText: {
+        width: '100%',
+        color: "#a50034",
+        fontSize: 16,
+        paddingTop: 5,
+    },
+    commonText: {
+        width: '100%',
+        fontSize: 16,
+        paddingTop: 5,
+        textAlign: 'center'
     },
     titleWrapper: {
         height: 50,
@@ -174,7 +182,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
         color: '#fff',
-        fontSize: 16
+        fontSize: 16,
     },
     buttonWrapper: {
         marginTop: 20,

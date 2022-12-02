@@ -41,8 +41,26 @@ const MainPage = () => {
       setRecentItem({exist: true, data: result.data.data, start_time: new Date(result.data.data)});
     }
     fetchRecentReserve();
+    const fetchRecentCreserve = async () => {
+      let result = await axios.post('http://15.165.172.198/cr/previousReserve', {
+        access_token: await AsyncStorage.getItem('access_token'),
+      });
+      
+
+      if (result.data.code == Number(4030)) {
+        setRecentItem({exist: false});
+        return;
+      }
+      
+      if (result.data.code == Number(3010)) {
+        navigation.navigate("Login");
+        return;
+      }
+      console.log(result.data.data);
+    }
+    fetchRecentCreserve();
     
-  })
+  },[]);
 
   const openContainer9 = useCallback(() => {
     setContainer9Visible(true);

@@ -12,7 +12,6 @@ const fetchCloset = async (setClosetData) => {
         access_token: await AsyncStorage.getItem('access_token'),
     });
     if(result.data.isSuccess){
-        console.log(result.data.data);
         setClosetData(result.data.data);
     }
 }

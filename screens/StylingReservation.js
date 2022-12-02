@@ -78,6 +78,7 @@ const StylingReservation = ({route}) => {
                         agendaTodayColor: "#a50034", // today in list
                         textDefaultColor: "#a50034",
                         selectedDayBackgroundColor: "#a50034", // calendar sel date
+                        arrowColor: "#a50034", // calendar sel date
                         dotColor: "#a50034", // dots
                         'stylesheet.calendar.header': {
                             dayTextAtIndex0: {
@@ -124,6 +125,7 @@ const StylingReservation = ({route}) => {
             <Modal presentationStyle={"formSheet"} visible={modalVisible.state} onDismiss={()=>setModalVisible({state: false, reload: false})}>
                 <View style={styles.modalContainer}>
                     <Text style={styles.modalText}>{modalText}</Text>
+                    <Text style={styles.modalText}>{modalText}</Text>
                     <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={()=>{setModalVisible({state: false, reload: false}); if(modalVisible.reload) navigation.replace("StylingMain")}}>
                         <Text style={styles.text}>확인</Text>
                     </TouchableOpacity>
@@ -149,6 +151,8 @@ const styles = StyleSheet.create({
         color: "#a50034",
         fontWeight: "700",
         fontSize: 20,
+        width: "100%",
+        paddingHorizontal: 30,
     },
     textInput: {
         height: 40,
