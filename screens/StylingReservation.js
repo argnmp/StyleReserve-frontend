@@ -19,7 +19,6 @@ const addCreserve = async (navigation, selectedDate, description, cloth_id, setM
         setModalVisible({state: true, reload: false});
         return;
     }
-    console.log(selectedDate.getDate());
     let result = await axios.post('http://15.165.172.198/cr/addCReserve', {
         access_token: await AsyncStorage.getItem('access_token'),
         cloth_id,
@@ -28,7 +27,6 @@ const addCreserve = async (navigation, selectedDate, description, cloth_id, setM
         date: selectedDate.getDate(),
         description,
     });
-    console.log(result.data);
     if(result.data.isSuccess == false){
         setModalText("일정 등록에 실패하였습니다");
         setModalVisible({state: true, reload: false});
@@ -65,7 +63,6 @@ const StylingReservation = ({route}) => {
     const navigation = useNavigation();
 
     useEffect(() => {
-        console.log(route.params.cloth_id);
         fetchMonthData(setReservedDate, new Date().getFullYear(), new Date().getMonth()+1, route.params.cloth_id);
     }, []);
   
@@ -89,7 +86,7 @@ const StylingReservation = ({route}) => {
                             }
                         }
                     }}
-                    onMonthChange={(day)=>{fetchMonthData(setReservedDate, day.year, day.month)}}
+                    onMonthChange={(day)=>{fetchMonthData(setReservedDate, day.year, day.month, route.params.cloth_id)}}
                     markedDates={reservedDate}
                     onDayPress={(day)=>{
                         if(!Object.keys(reservedDate).includes(day.dateString)){
@@ -125,8 +122,7 @@ const StylingReservation = ({route}) => {
             <Modal presentationStyle={"formSheet"} visible={modalVisible.state} onDismiss={()=>setModalVisible({state: false, reload: false})}>
                 <View style={styles.modalContainer}>
                     <Text style={styles.modalText}>{modalText}</Text>
-                    <Text style={styles.modalText}>{modalText}</Text>
-                    <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={()=>{setModalVisible({state: false, reload: false}); if(modalVisible.reload) navigation.replace("StylingMain")}}>
+                    <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={()=>{setModalVisible({state: false, reload: false}); if(modalVisible.reload) navigation.pop(); navigation.pop(); navigation.replace("StylingMain")}}>
                         <Text style={styles.text}>확인</Text>
                     </TouchableOpacity>
                 </View>

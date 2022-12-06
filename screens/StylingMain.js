@@ -7,6 +7,7 @@ import { AsyncStorage } from 'react-native';
 import Layout from './layout';
 import { Modal, TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const fetchMonthData = async (setReceivedData, setUserReservedDate, year, month) => {
     let result = await axios.post('http://15.165.172.198/cr/checkUserReserve', {
@@ -14,13 +15,18 @@ const fetchMonthData = async (setReceivedData, setUserReservedDate, year, month)
         year,
         month,
     });
-    console.log(result.data.data);
     const receivedData = {};
     const dates = {};
     for (let i of result.data.data) {
+        console.log(i);
         let date = new Date(i.reservation_date);
-        dates[`${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`] = { marked: true, selectedColor: '#3388ff' };
-        receivedData[`${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`] = { description: i.description, cloth_id: i.clothes_id, url: i.Clothe.url, name: i.Clothe.name, brand_name: i.Clothe.brand_name}
+        if(receivedData[`${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`]){
+            receivedData[`${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`].push({ description: i.description, cloth_id: i.clothes_id, url: i.Clothe.url, name: i.Clothe.name, brand_name: i.Clothe.brand_name});
+        }
+        else {
+            receivedData[`${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`] = [{ description: i.description, cloth_id: i.clothes_id, url: i.Clothe.url, name: i.Clothe.name, brand_name: i.Clothe.brand_name}]
+        }
+        dates[`${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`] = { marked: true};
     }
     console.log(receivedData)
 
@@ -36,6 +42,7 @@ const StylingMain = () => {
     const [modalText, setModalText] = useState("");
 
     const navigation = useNavigation();
+    let key = 1;
 
     useEffect(() => {
         (async()=>{
@@ -59,12 +66,6 @@ const StylingMain = () => {
                         selectedDayBackgroundColor: "#a50034", // calendar sel date
                         dotColor: "#a50034", // dots
                         'stylesheet.calendar.header': {
-                            dayTextAtIndex0: {
-                                color: 'red'
-                            },
-                            dayTextAtIndex6: {
-                                color: 'blue'
-                            }
                         },
                         arrowColor: "#a50034",
                     }}
@@ -87,24 +88,36 @@ const StylingMain = () => {
                 </View>
             </View>
 
+
             <Modal presentationStyle={"fullScreen"} visible={modalVisible} onDismiss={()=>setModalVisible(false)}>
-                {receivedData && selectedDate &&
-                <View style={styles.modalContainer}>
+                {console.log(selectedDate)}
+                {receivedData && selectedDate && receivedData[selectedDate] && (
+                <ScrollView style={styles.modalScroll}>
+                    <View style={styles.modalItemContainer}>
                     <Text style={styles.modalTitleText}>{selectedDate}</Text>
-                    <Text style={styles.modalText}>{receivedData[selectedDate].name}</Text>
-                    <Text style={styles.modalText}>{receivedData[selectedDate].brand_name}</Text>
-                    <Image
-                      resizeMode="center"
-                      style={styles.itemImage}
-                      source={{ uri: receivedData[selectedDate].url }}
-                    />
-                    <Text style={styles.commonText}>{receivedData[selectedDate].description}</Text>
-                    <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={()=>{setModalVisible(false); }}>
+                    </View>
+                        {receivedData[selectedDate].map((elem)=>(
+                        <View style={styles.modalContainer} key={key++}>
+                            <Text style={styles.modalText}>{elem.name}</Text>
+                            <Text style={styles.modalText}>{elem.brand_name}</Text>
+                            <Image
+                                resizeMode="center"
+                                style={styles.itemImage}
+                                source={{ uri: elem.url }}
+                            />
+                            <Text style={styles.commonText}>{elem.description}</Text>
+                        </View>
+
+                        ))}
+                
+                    <View style={{...styles.modalItemContainer, backgroundColor: 'none'}}>
+                    <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => { setModalVisible(false); }}>
                         <Text style={styles.text}>확인</Text>
                     </TouchableOpacity>
-                </View>
-                
-                }
+
+                    </View>
+                </ScrollView>
+    )}
             </Modal>
         </Layout>
     );
@@ -142,23 +155,23 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20,
     },
     text: {
         color: "#fff",
     },
     modalContainer: {
         backgroundColor: "#fff",
-        margin: 20,
+        margin: 10,
         minHeight: 150,
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
+        marginBottom: 0,
     },
     modalTitleText: {
         width: '100%',
-        color: "#a50034",
+        color: "#fff",
         fontSize: 20,
         fontWeight: "700",
     },
@@ -187,6 +200,20 @@ const styles = StyleSheet.create({
     buttonWrapper: {
         marginTop: 20,
         alignItems: 'center',
+    },
+    modalScroll: {
+        width: "100%",
+    },
+    modalItemContainer: {
+        backgroundColor: "#a50034",
+        margin: 10,
+        marginBottom: 0,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+
     }
 
 
