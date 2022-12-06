@@ -1,6 +1,3 @@
-# StyleReserve
-This is a Front-End code for StyleReserve, mostly written in React Native Code.
-
 # :necktie: StyleReserve
 This project was made for the Software Engineering course at Hanyang University.<div>
 
