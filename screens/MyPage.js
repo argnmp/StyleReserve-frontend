@@ -4,7 +4,7 @@ import Layout from './layout';
 
 const MyPage = () => {
   return (
-    <Layout title={'My Closet'}>
+    <Layout title={'My Page'}>
       <View style={styles.groupView1}>
         <Text style={styles.userNameText}>User Name</Text>
         <View style={styles.rectangleView4}>
