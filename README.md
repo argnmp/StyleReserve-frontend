@@ -26,9 +26,9 @@ b. In order to minimize the vacancy of hangers when booking Styler, we would lik
 
 c. In the case of using Styler in the family unit, we want to prevent overlapping schedules for family members to wear clothes. It provides a UI that can manage and grasp data such as the date to wear clothes through 'StyleReserve'.
   
-d. "StyleReserve" will provide a service that informs you of the schedule related to clothes by sending a push notification that recommends booking a styler in advance by informing you of the clothes you will wear the next day in advance. // 푸시 알림 기능 있을 경우에만 포함할 내용
+d. "StyleReserve" will provide a service that informs you of the schedule related to clothes by sending a push notification that recommends booking a styler in advance by informing you of the clothes you will wear the next day in advance. 
 
-e. When adding clothes to StyleReserve, it is possible to add them automatically without having to enter all the information related to clothes directly. For products registered with MUSINSA, convenience is provided by automatically registering photos and information of the clothes.//무신사 모듈 있을 경우에만 포함할 내용
+e. When adding clothes to StyleReserve, it is possible to add them automatically without having to enter all the information related to clothes directly. For products registered with MUSINSA, convenience is provided by automatically registering photos and information of the clothes.
   
 ## :pushpin: Prototype
 
