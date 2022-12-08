@@ -809,7 +809,7 @@ const styles = StyleSheet.create({
   },
   contentText: {
     position: "absolute",
-    bottom: 40,
+    bottom: 15,
     left: 20,
     fontSize: 15,
     color: "#1e1d1d",

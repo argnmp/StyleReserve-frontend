@@ -1,87 +1,24 @@
 import * as React from "react";
-import { useState, useCallback, useEffect } from "react";
-import { SafeAreaView, StyleSheet, View, Text, Image, Pressable, Modal, AsyncStorage } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import Alarmcenterbanner from "../components/Alarmcenterbanner";
-import Logout from "../components/Logout";
-import NavigationBar from "../components/NavigationBar";
+import { StyleSheet, View, Text } from "react-native";
+import Layout from './layout';
 
 const MyPage = () => {
-  const [notificationContainerVisible, setNotificationContainerVisible] =
-    useState(false);
-  const navigation = useNavigation();
-
-  const openNotificationContainer = useCallback(() => {
-    setNotificationContainerVisible(true);
-  }, []);
-
-  const closeNotificationContainer = useCallback(() => {
-    setNotificationContainerVisible(false);
-  }, []);
-  
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.menuView}>
-      <View style={styles.rectangleView12} />
-      <Pressable
-        style={styles.notificationPressable}
-        onPress={openNotificationContainer}
-      >
-        <View style={styles.rectangleView13} />
-        <Image
-          style={styles.notificationIcon}
-          resizeMode="cover"
-          source={require("../assets/notification-black.png")} />
-      </Pressable>
-      <Pressable
-        style={styles.pressable1}
-        onPress={() => navigation.navigate("MainPage")}
-      >
-        <View style={styles.rectangleView14} />
-        <Image
-          style={styles.arrowLeft}
-          resizeMode="cover"
-          source={require("../assets/back-arrow.png")} />
-      </Pressable>
-      <View style={styles.view1}>
-        <Text style={styles.wed15SeptemperText}>My Page</Text>
-      </View>
-    </View>
-    
-
-    <View style={styles.view}>
-      <NavigationBar />
-      <View style={styles.redbox} />
-    </View>
-    
-
-    <View style={styles.groupView1}>
-      <Text style={styles.userNameText}>User Name</Text>
-      <View style={styles.rectangleView4}>
-        <Text style={styles.text1}>Kim Tae Hyeon</Text>
-      </View>
-    </View>
-    
-    <View style={styles.groupView2}>
-      <Text style={styles.emailText}>Email</Text>
-      <View style={styles.rectangleView5}>
-        <Text style={styles.text1}>abc@abc.com</Text>
-      </View>
-    </View>
-
-    <Modal
-      animationType="fade"
-      transparent
-      visible={notificationContainerVisible}
-    >
-        <View style={styles.notificationContainerOverlay}>
-          <Pressable
-            style={styles.notificationContainerBg}
-            onPress={closeNotificationContainer} />
-          <Alarmcenterbanner onClose={closeNotificationContainer} />
+    <Layout title={'My Page'}>
+      <View style={styles.groupView1}>
+        <Text style={styles.userNameText}>User Name</Text>
+        <View style={styles.rectangleView4}>
+          <Text style={styles.text1}>박세은</Text>
         </View>
-      </Modal>
-    </SafeAreaView>
+      </View>
+
+      <View style={styles.groupView2}>
+        <Text style={styles.emailText}>Email</Text>
+        <View style={styles.rectangleView5}>
+          <Text style={styles.text1}>abc@abc.com</Text>
+        </View>
+      </View>
+    </Layout>
   );
 };
 
@@ -97,23 +34,23 @@ const styles = StyleSheet.create({
   },
   groupView2: {
     position: "absolute",
-    top: 200,
+    top: 20,
     left: 31,
     width: 328,
     height: 64.2,
   },
   groupView1: {
     position: "absolute",
-    top: 120,
+    top: -50,
     left: 31,
     width: 328,
     height: 64.2,
   },
   text1: {
     position: "absolute",
-    top: 13,
+    top: 15,
     left: 15,
-    fontSize: 14,
+    fontSize: 15,
     color: "#6a6a6a",
     textAlign: "left",
     display: "flex",
