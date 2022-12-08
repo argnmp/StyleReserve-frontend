@@ -34,7 +34,7 @@ const AppNavigator = () => {
       }}
     >
 
-      <Stack.Screen name="Loading" component={MainPage} options={{ headerShown: false }} />
+      <Stack.Screen name="Loading" component={Login} options={{ headerShown: false }} />
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
       <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{ headerShown: false }} />
       <Stack.Screen name="FindPassword" component={FindPassword} options={{ headerShown: false }} />

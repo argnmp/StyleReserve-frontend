@@ -18,11 +18,9 @@ const StylerReservation = () => {
 
     const loadItems = (day) => {
 
-      console.log('loadItems', day);
       let i = 0;
       const time = day.timestamp + i * 24 * 60 * 60 * 1000;
       const strTime = timeToString(time);
-      console.log('strTime', strTime)
 
       const newItems = {};
       newItems[strTime] = [];
@@ -38,7 +36,6 @@ const StylerReservation = () => {
     const renderItem = (day, item) => {
         return (
           <>
-          {console.log('renderItems')}
             {item.target()}
           </>
         );
