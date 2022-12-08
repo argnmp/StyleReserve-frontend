@@ -10,7 +10,6 @@ const DropdownList = ({ onClose }) => {
       <View style={styles.item1View}>
         <Pressable
           style={styles.pressable}
-          onPress={() => navigation.navigate("AddClothesInfo")}
         >
           <Text style={styles.topsText}>Tops</Text>
         </Pressable>

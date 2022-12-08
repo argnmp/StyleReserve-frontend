@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: '1 1 0',
+        width: '100%',
     },
     footer: {
         flex: '0 1 0' 

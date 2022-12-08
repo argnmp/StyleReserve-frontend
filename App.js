@@ -9,9 +9,9 @@ import FindPassword from "./screens/FindPassword";
 import FoundPassword from "./screens/FoundPassword";
 import MainPage from "./screens/MainPage";
 import StylerReservation from "./screens/StylerReservation";
-import AddClothesInfo from "./screens/AddClothesInfo";
 import EditInfo from "./screens/EditInfo";
 import MyCloset from "./screens/MyCloset";
+import AddClothes from "./screens/AddClothes";
 import MyPage from "./screens/MyPage";
 import TodayReservation from "./screens/TodayReservation";
 import reserveclothes from "./screens/reserveclothes";
@@ -19,8 +19,6 @@ import StylingReservation from "./screens/StylingReservation";
 import StylingMain from "./screens/StylingMain";
 
 import Layout from "./screens/layout";
-import PersonalStylingCalender from "./screens/personalstylingCalendar";
-
 
 const Stack = createStackNavigator();
 
@@ -36,20 +34,24 @@ const AppNavigator = () => {
       }}
     >
 
-      <Stack.Screen name="Loading" component={Login} options={{ headerShown: false }} />
+      <Stack.Screen name="Loading" component={MainPage} options={{ headerShown: false }} />
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
       <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{ headerShown: false }} />
       <Stack.Screen name="FindPassword" component={FindPassword} options={{ headerShown: false }} />
       <Stack.Screen name="FoundPassword" component={FoundPassword} options={{ headerShown: false }} />
       <Stack.Screen name="MainPage" component={MainPage} options={{ headerShown: false }} />
+
       <Stack.Screen name="TodayReservation" component={TodayReservation} options={{ headerShown: false, unmountOnBlur: true }} />
       <Stack.Screen name="StylerReservation" component={StylerReservation} options={{ headerShown: false }} />
-      <Stack.Screen name="AddClothesInfo" component={AddClothesInfo} options={{ headerShown: false }} />
       <Stack.Screen name="EditInfo" component={EditInfo} options={{ headerShown: false }} />
+
       <Stack.Screen name="MyCloset" component={MyCloset} options={{ headerShown: false }} />
+      <Stack.Screen name="AddClothes" component={AddClothes} options={{ headerShown: false }} />
       <Stack.Screen name="MyPage" component={MyPage} options={{ headerShown: false }} />
       <Stack.Screen name="StylingMain" component={StylingMain} options={{ headerShown: false }} />
       <Stack.Screen name="StylingReservation" component={StylingReservation} options={{ headerShown: false }} />
+
+      
       <Stack.Screen name="reserveclothes" component={reserveclothes} options={{ headerShown: false }} />
       <Stack.Screen name="Layout" component={Layout} options={{ headerShown: false }} />
     </Stack.Navigator>

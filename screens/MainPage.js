@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useCallback, useEffect } from "react";
 import { Image, StyleSheet, View, Text, Pressable, Modal, AsyncStorage } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 import Alarmcenterbanner from "../components/Alarmcenterbanner";
 import Layout from "./layout";
@@ -9,6 +9,7 @@ import Layout from "./layout";
 const courses = ["미세먼지 제거", "눈/비 건조", "정장/코트", "스팀살균", "표준"];
 const MainPage = () => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [nickname, setNickname] = useState("");
   const [recentItem, setRecentItem] = useState({});
   const [container9Visible, setContainer9Visible] = useState(false);
@@ -60,7 +61,7 @@ const MainPage = () => {
     }
     fetchRecentCreserve();
     
-  },[]);
+  },[isFocused]);
 
   const openContainer9 = useCallback(() => {
     setContainer9Visible(true);
