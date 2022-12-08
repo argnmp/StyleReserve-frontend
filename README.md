@@ -31,10 +31,10 @@ d. "StyleReserve" will provide a service that informs you of the schedule relate
 e. When adding clothes to StyleReserve, it is possible to add them automatically without having to enter all the information related to clothes directly. For products registered with MUSINSA, convenience is provided by automatically registering photos and information of the clothes.//무신사 모듈 있을 경우에만 포함할 내용
   
 ## :pushpin: Prototype
-Screens:
+Screens)
 <img src="https://user-images.githubusercontent.com/117427127/205932947-946f6497-16d1-46d8-9a0d-362795b3f056.jpg" width="40%"></img>
 
-Video:
+Video)
 https://youtu.be/AHTlY_MpAQ4
 https://youtu.be/O56TUxMODo4
 
