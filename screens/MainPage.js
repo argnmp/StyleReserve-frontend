@@ -12,6 +12,7 @@ const MainPage = () => {
   const isFocused = useIsFocused();
   const [nickname, setNickname] = useState("");
   const [recentItem, setRecentItem] = useState({});
+  const [recentClothes, setRecentClothes] = useState({});
   const [container9Visible, setContainer9Visible] = useState(false);
   
   useEffect(()=>{
@@ -39,15 +40,14 @@ const MainPage = () => {
         navigation.navigate("Login");
         return;
       }
-      setRecentItem({exist: true, data: result.data.data, start_time: new Date(result.data.data)});
+      setRecentItem({exist: true, data: result.data.data});
     }
     fetchRecentReserve();
     const fetchRecentCreserve = async () => {
-      let result = await axios.post('http://15.165.172.198/cr/previousReserve', {
+      let result = await axios.post('http://15.165.172.198/cr/nearReserve', {
         access_token: await AsyncStorage.getItem('access_token'),
       });
       
-
       if (result.data.code == Number(4030)) {
         setRecentItem({exist: false});
         return;
@@ -57,7 +57,7 @@ const MainPage = () => {
         navigation.navigate("Login");
         return;
       }
-      console.log(result.data.data);
+      setRecentClothes({exist: true, data: result.data.data});
     }
     fetchRecentCreserve();
     
@@ -132,24 +132,27 @@ const MainPage = () => {
                     스타일링 예약
                   </Text>
                 </View>
-                <View style={styles.innerSch}>
-                  <View style={styles.groupView}>
-                    <Text style={styles.text5}>청바지</Text>
-                    <View style={styles.clistView}>
-                      <Text style={styles.may2021Text}>Date</Text>
-                      <Text style={[styles.text6, styles.ml24]}>11월 7일</Text>
-                    </View>
-                    <View style={styles.clistView1}>
-                      <Text style={styles.may2021Text1}>Purpose</Text>
-                      <Text style={[styles.text7, styles.ml24]}>Meeting</Text>
-                    </View>
-                    <View style={styles.clistView2}>
-                      <Text style={styles.may2021Text2}>Alarm</Text>
-                      <Text style={[styles.text8, styles.ml24]}>ON</Text>
+                {recentClothes.exist ?
+                  <View style={styles.innerSch}>
+                    <View style={styles.groupView}>
+                      <Text style={styles.text55} numberOfLines={1}>{recentClothes.data.Clothe.name}</Text>
+                      <View style={styles.clistView}>
+                        <Text style={styles.may2021Text}>Date</Text>
+                        <Text style={[styles.text6, styles.ml24]}>{new Date(recentClothes.data.reservation_date).getMonth() + 1}월 {new Date(recentClothes.data.reservation_date).getDate()}일</Text>
+                      </View>
+                      <View style={styles.clistView1}>
+                        <Text style={styles.may2021Text1}>Purpose</Text>
+                        <Text style={[styles.text7, styles.ml24]} numberOfLines={1}>{recentClothes.data.description}</Text>
+                      </View>
+                      <View style={styles.clistView2}>
+                        <Text style={styles.may2021Text2}>Alarm</Text>
+                        <Text style={[styles.text8, styles.ml24]}>ON</Text>
+                      </View>
                     </View>
                   </View>
-
-                </View>
+                  :
+                  <Text style={styles.text20}>다음 예약이 없습니다</Text>
+                }
 
               </View>
             </View>
@@ -209,7 +212,6 @@ const styles = StyleSheet.create({
     marginLeft: 74,
   },
   ml24: {
-    marginLeft: 24,
   },
   container9Overlay: {
     flex: 1,
@@ -460,6 +462,20 @@ const styles = StyleSheet.create({
     width: 118.93,
     height: 30,
   },
+  text55: {
+    position: "absolute",
+    top: 15,
+    left: 15,
+    fontSize: 15,
+    letterSpacing: -1,
+    fontWeight: "700",
+    color: "#a50034",
+    textAlign: "left",
+    display: "flex",
+    alignItems: "center",
+    width: 130,
+    height: 30,
+  },
   may2021Text: {
     flex: 1,
     position: "relative",
@@ -507,6 +523,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
+    overflow: 'hidden'
   },
   may2021Text2: {
     flex: 1,
