@@ -11,7 +11,7 @@ const MainPage = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [nickname, setNickname] = useState("");
-  const [recentItem, setRecentItem] = useState({});
+  const [recentItem, setRecentItem] = useState({exist: false});
   const [recentClothes, setRecentClothes] = useState({});
   const [container9Visible, setContainer9Visible] = useState(false);
   
@@ -29,6 +29,7 @@ const MainPage = () => {
       let result = await axios.post('http://15.165.172.198/sr/getRecentReserve', {
         access_token: await AsyncStorage.getItem('access_token'),
       });
+      console.log(result.data);
       
 
       if (result.data.code == Number(4030)) {
@@ -49,6 +50,10 @@ const MainPage = () => {
       });
       
       if (result.data.code == Number(4030)) {
+        setRecentItem({exist: false});
+        return;
+      }
+      if (!result.data.data) {
         setRecentItem({exist: false});
         return;
       }
@@ -98,6 +103,7 @@ const MainPage = () => {
                   <View style={styles.groupView}>
                     {recentItem.exist ? 
                     <>
+                    {console.log(recentItem)}
                     <Text style={styles.text5}>{courses[recentItem.data.course.course_id-1]}</Text>
                     <View style={styles.clistView}>
                       <Text style={styles.may2021Text3}>Date</Text>
@@ -132,8 +138,8 @@ const MainPage = () => {
                     스타일링 예약
                   </Text>
                 </View>
-                {recentClothes.exist ?
                   <View style={styles.innerSch}>
+                {recentClothes.exist ?
                     <View style={styles.groupView}>
                       <Text style={styles.text55} numberOfLines={1}>{recentClothes.data.Clothe.name}</Text>
                       <View style={styles.clistView}>
@@ -149,10 +155,10 @@ const MainPage = () => {
                         <Text style={[styles.text8, styles.ml24]}>ON</Text>
                       </View>
                     </View>
-                  </View>
                   :
                   <Text style={styles.text20}>다음 예약이 없습니다</Text>
                 }
+                  </View>
 
               </View>
             </View>

@@ -2,7 +2,22 @@ import * as React from "react";
 import { useState, useCallback } from "react";
 import { Text, StyleSheet, View, Pressable, Modal, TextInput } from "react-native";
 import Signupbanner from "../components/SignUpBanner";
+import axios from 'axios'
 
+const signup = async (username, email, password, setSignUpButtonContainerVisible) => {
+  let result = await axios.post('http://15.165.172.198/auth/local/signup', {
+    nickname: username,
+    email,
+    password,
+  });
+
+  if(result.data.isSuccess){
+    setSignUpButtonContainerVisible(true);
+  }
+  
+  console.log(result.data);
+
+}
 const SignUpScreen = () => {
   const [username, setName] = useState();
   const [email, setEmail] = useState();
@@ -55,6 +70,7 @@ const SignUpScreen = () => {
             <View style={styles.enterBoxView2} />
             <TextInput
             style={styles.text2}
+            secureTextEntry={true} 
             placeholder="6자 이상"
             onChangeText={newText => setPassword(newText)}
             />
@@ -66,6 +82,7 @@ const SignUpScreen = () => {
             <View style={styles.enterBoxView3} />
             <TextInput
             style={styles.text2}
+            secureTextEntry={true} 
             placeholder="6자 이상"
             onChangeText={newText => setPasswordConfirm(newText)}
             />
@@ -73,7 +90,7 @@ const SignUpScreen = () => {
         </View>
         <Pressable
           style={styles.signUpButtonPressable}
-          onPress={openSignUpButtonContainer}
+          onPress={async ()=>{signup(username, email, password, setSignUpButtonContainerVisible);}}
         >
           <View style={styles.buttonView} />
           <Text style={styles.text6}>회원가입하기</Text>
