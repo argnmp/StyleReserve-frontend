@@ -16,7 +16,7 @@ const LoadingNext = () => {
         <AssetExample />
         <Text style={styles.smallparagraph}>LG STYLER RESERVATION SERVICE</Text>
         <Text style={styles.bigparagraph}>STYLERESERVE</Text>
-        <Text style={styles.copyright}>ⓒ Dressing Sauce from Hanyang University</Text>
+        <Text style={styles.copyright}>ⓒ Dressing Sauce</Text>
       </Pressable>
     </View>
   );
